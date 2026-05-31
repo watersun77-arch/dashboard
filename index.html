@@ -1,0 +1,1113 @@
+<!-- 이재겸 교수 · 2026-1학기 일정 대시보드 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오늘의 일정 · 2026-1학기</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+  :root{
+    --paper:#F6F1E7; --paper2:#FBF8F1; --ink:#2A2622; --ink-soft:#6F665B;
+    --line:#E3D9C6; --line2:#D6C9B0;
+    --accent:#1C5E57;           /* deep teal */
+    --c-lec:#3A6EA5;            /* 강의/실습 */
+    --c-def:#B5651D;            /* 심사 */
+    --c-meet:#7A5C9E;           /* 회의 */
+    --c-exam:#B23B3B;           /* 시험 */
+    --c-event:#3E8E5A;          /* 행사 */
+    --c-note:#8A8170;           /* 비고/휴일 */
+    --c-other:#5F6B73;          /* 기타 */
+    --cat-nursing:#1C5E57;      /* 간호학과 */
+    --cat-rise:#3E4C8A;         /* RISE 사업단 */
+    --cat-personal:#B0567E;     /* 개인 */
+    --shadow:0 8px 30px rgba(42,38,34,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'IBM Plex Sans KR',sans-serif;color:var(--ink);
+    background:
+      radial-gradient(1200px 500px at 85% -10%, rgba(28,94,87,.06), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(181,101,29,.06), transparent 55%),
+      var(--paper);
+    min-height:100vh;padding:28px 18px 60px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1176px;margin:0 auto}
+
+  /* ── 헤더 ── */
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+  .nav .who{font-size:13px;letter-spacing:.04em;color:var(--ink-soft);font-weight:500}
+  .nav .who b{color:var(--accent);font-weight:700}
+  .ctrls{display:flex;align-items:center;gap:6px}
+  .ctrls button,.ctrls input{
+    font-family:inherit;border:1px solid var(--line2);background:var(--paper2);
+    color:var(--ink);border-radius:10px;padding:7px 11px;font-size:13px;cursor:pointer;
+    transition:.15s;font-weight:500;
+  }
+  .ctrls button:hover{background:#fff;border-color:var(--accent);color:var(--accent)}
+  .ctrls input[type=date]{cursor:pointer}
+  .ctrls .today-btn{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .ctrls .today-btn:hover{filter:brightness(1.08);color:#fff}
+
+  .hero{
+    background:linear-gradient(180deg,var(--paper2),#fff);
+    border:1px solid var(--line);border-radius:20px;padding:26px 28px;
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+    animation:rise .5s ease both;
+  }
+  .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;
+    background:radial-gradient(circle,rgba(28,94,87,.10),transparent 70%);border-radius:50%}
+  .week-tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.08em;
+    color:var(--accent);background:rgba(28,94,87,.09);padding:4px 12px;border-radius:999px;margin-bottom:12px}
+  .love-dday{display:inline-flex;align-items:center;gap:3px;letter-spacing:0;font-weight:700;
+    color:#C53030;background:rgba(197,48,48,.09);border:1px solid rgba(197,48,48,.18);
+    border-radius:999px;padding:1px 8px;margin-left:2px;font-size:11.5px;line-height:1.3}
+  .love-dday .heart{font-size:12px;line-height:1}
+  .date-main{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:clamp(30px,7vw,48px);
+    line-height:1.1;letter-spacing:-.01em}
+  .date-sub{font-size:15px;color:var(--ink-soft);margin-top:6px;font-weight:400}
+  .date-dow{color:var(--c-def);font-weight:600}
+
+  /* ── 섹션 ── */
+  .grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:18px}
+  @media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
+  .card{background:var(--paper2);border:1px solid var(--line);border-radius:18px;padding:20px 20px 22px;
+    box-shadow:var(--shadow);animation:rise .55s ease both}
+  .card.delay{animation-delay:.07s}
+  .card h2{font-family:'Nanum Myeongjo',serif;font-size:19px;font-weight:700;margin-bottom:4px;
+    display:flex;align-items:center;gap:8px}
+  .card .sub{font-size:12.5px;color:var(--ink-soft);margin-bottom:16px}
+
+  /* 오늘 일정 아이템 */
+  .item{display:flex;gap:14px;padding:13px 0;border-top:1px solid var(--line)}
+  .item:first-of-type{border-top:none}
+  .time{flex:0 0 56px;font-variant-numeric:tabular-nums;font-weight:600;font-size:14px;color:var(--ink);padding-top:1px}
+  .time small{display:block;font-weight:400;color:var(--ink-soft);font-size:11.5px}
+  .body{flex:1}
+  .body .t{font-weight:600;font-size:15px}
+  .body .meta{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+  .badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;
+    vertical-align:middle;margin-left:6px;color:#fff}
+  .dot{width:9px;height:9px;border-radius:50%;flex:0 0 9px;margin-top:6px}
+  .b-lec{background:var(--c-lec)} .b-def{background:var(--c-def)} .b-meet{background:var(--c-meet)}
+  .b-exam{background:var(--c-exam)} .b-event{background:var(--c-event)} .b-note{background:var(--c-note)} .b-other{background:var(--c-other)}
+
+  .empty{text-align:center;padding:22px 10px;color:var(--ink-soft)}
+  .empty .big{font-family:'Nanum Myeongjo',serif;font-size:22px;color:var(--ink);margin-bottom:4px}
+
+  /* 중요한 일정 */
+  .urg{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px dashed var(--line2)}
+  .urg:first-of-type{border-top:none}
+  .dday{flex:0 0 auto;min-width:52px;text-align:center;font-weight:700;font-size:13px;border-radius:10px;
+    padding:7px 8px;line-height:1.15;font-variant-numeric:tabular-nums}
+  .dday small{display:block;font-size:9.5px;font-weight:500;opacity:.8}
+  .dday.soon{background:var(--c-def);color:#fff}
+  .dday.near{background:#EBD9C2;color:#7a4a18}
+  .dday.far{background:#EAE3D4;color:var(--ink-soft)}
+  .dday.zero{background:var(--c-exam);color:#fff}
+  .urg .info{flex:1}
+  .urg .info .t{font-weight:600;font-size:14.5px}
+  .urg .info .d{font-size:12px;color:var(--ink-soft);margin-top:1px}
+
+  /* 주간 스트립 */
+  .weekstrip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:6px}
+  .ws{border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;
+    background:#fff;transition:.15s;min-height:62px}
+  .ws:hover{border-color:var(--accent)}
+  .ws.sel{background:var(--accent);border-color:var(--accent)}
+  .ws.sel *{color:#fff !important}
+  .ws .dn{font-size:11px;color:var(--ink-soft)}
+  .ws .dd{font-family:'Nanum Myeongjo',serif;font-weight:700;font-size:17px}
+  .ws .dots{display:flex;gap:3px;justify-content:center;margin-top:5px;height:8px}
+  .ws .dots i{width:6px;height:6px;border-radius:50%;display:inline-block}
+
+  .legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:20px;justify-content:center;
+    font-size:12px;color:var(--ink-soft)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:10px;height:10px;border-radius:50%}
+
+  .foot{text-align:center;color:var(--ink-soft);font-size:11.5px;margin-top:26px;line-height:1.7}
+
+  /* 카테고리 탭 */
+  .tabs{display:flex;gap:8px;margin:16px 0 0;flex-wrap:wrap}
+  .tab{font-family:inherit;border:1px solid var(--line2);background:var(--paper2);color:var(--ink-soft);
+    border-radius:999px;padding:8px 16px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;
+    display:inline-flex;align-items:center;gap:7px}
+  .tab:hover{border-color:var(--accent)}
+  .tab .cdot{width:9px;height:9px;border-radius:50%}
+  .tab.on{color:#fff;border-color:transparent}
+  .tab.on.t-all{background:var(--ink)}
+  .tab.on.t-nursing{background:var(--cat-nursing)}
+  .tab.on.t-rise{background:var(--cat-rise)}
+  .tab.on.t-personal{background:var(--cat-personal)}
+  /* 카테고리 표시 */
+  .catchip{font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;color:#fff;
+    margin-left:6px;letter-spacing:.02em;vertical-align:middle}
+  .item.cat-nursing,.urg.cat-nursing{border-left:3px solid var(--cat-nursing);padding-left:11px}
+  .item.cat-rise,.urg.cat-rise{border-left:3px solid var(--cat-rise);padding-left:11px}
+  .item.cat-personal,.urg.cat-personal{border-left:3px solid var(--cat-personal);padding-left:11px}
+
+  /* 교수 메모장 */
+  .memo-add{display:flex;gap:8px;margin:2px 0 14px}
+  .memo-add input{flex:1;font-family:inherit;font-size:14px;border:1px solid var(--line2);
+    background:#fff;border-radius:11px;padding:11px 13px;color:var(--ink)}
+  .memo-add input:focus{outline:none;border-color:var(--accent)}
+  .memo-add button{font-family:inherit;font-weight:600;font-size:13.5px;border:none;cursor:pointer;
+    background:var(--accent);color:#fff;border-radius:11px;padding:0 18px;transition:.15s}
+  .memo-add button:hover{filter:brightness(1.1)}
+  .memo-item{display:flex;align-items:flex-start;gap:12px;padding:12px 2px;border-top:1px solid var(--line)}
+  .memo-item:first-of-type{border-top:none}
+  .memo-bullet{flex:0 0 8px;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:8px;opacity:.75}
+  .memo-text{flex:1;font-size:14.5px;word-break:break-word;line-height:1.55}
+  .memo-del{flex:0 0 auto;border:none;background:none;color:var(--ink-soft);cursor:pointer;
+    font-size:18px;line-height:1;opacity:.4;transition:.15s;padding:2px 4px}
+  .memo-del:hover{opacity:1;color:var(--c-exam)}
+  .memo-empty{text-align:center;color:var(--ink-soft);padding:16px;font-size:13px}
+
+  .memo-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+  .memo-tab{font-family:inherit;border:1px solid var(--line2);background:#fff;color:var(--ink-soft);
+    border-radius:999px;padding:8px 15px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .memo-tab:hover{border-color:var(--accent);color:var(--accent)}
+  .memo-tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  /* 일정 완료/편집 */
+  .item{align-items:flex-start}
+  .ev-check{flex:0 0 19px;width:19px;height:19px;border:2px solid var(--line2);border-radius:6px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;transition:.15s;margin-top:1px}
+  .ev-check:hover{border-color:var(--accent)}
+  .ev-check.done{background:var(--accent);border-color:var(--accent)}
+  .item.done .body .t,.item.done .time{text-decoration:line-through}
+  .item.done .body .t,.item.done .time,.item.done .meta{color:var(--ink-soft)}
+  .item.done .badge,.item.done .catchip,.item.done .dot{opacity:.45}
+  .ev-acts{display:flex;gap:1px;flex:0 0 auto;margin-top:-1px}
+  .ev-acts button{border:none;background:none;cursor:pointer;color:var(--ink-soft);opacity:.38;
+    font-size:13px;padding:4px 5px;border-radius:6px;transition:.15s;line-height:1}
+  .ev-acts button:hover{opacity:1;background:rgba(0,0,0,.05)}
+  .ev-acts .del:hover{color:var(--c-exam)}
+  .urg.done .info .t{text-decoration:line-through;color:var(--ink-soft)}
+  .addrow{margin-top:14px}
+  .add-ev{font-family:inherit;font-size:13px;font-weight:600;color:var(--accent);background:rgba(28,94,87,.07);
+    border:1px dashed var(--line2);border-radius:11px;padding:10px 16px;cursor:pointer;transition:.15s;width:100%}
+  .add-ev:hover{background:rgba(28,94,87,.13);border-color:var(--accent)}
+  .reset-btn{font-family:inherit;font-size:11.5px;color:var(--ink-soft);background:none;border:none;
+    cursor:pointer;text-decoration:underline;margin-top:8px}
+  .reset-btn:hover{color:var(--c-exam)}
+
+  /* 모달 */
+  .modal-bg{position:fixed;inset:0;background:rgba(42,38,34,.45);display:none;align-items:center;
+    justify-content:center;padding:18px;z-index:50}
+  .modal-bg.open{display:flex}
+  .modal{background:var(--paper2);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.28);
+    width:100%;max-width:420px;padding:24px;animation:rise .25s ease both;max-height:90vh;overflow:auto}
+  .modal h3{font-family:'Nanum Myeongjo',serif;font-size:20px;margin-bottom:18px}
+  .field{margin-bottom:13px}
+  .field>label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:5px}
+  .field input,.field select,.field textarea{width:100%;font-family:inherit;font-size:14px;border:1px solid var(--line2);
+    background:#fff;border-radius:10px;padding:10px 12px;color:var(--ink)}
+  .field textarea{min-height:76px;resize:vertical;line-height:1.45}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+  .field.row2{display:flex;gap:10px} .field.row2>div{flex:1}
+  .field.inline{display:flex;align-items:center;gap:8px}
+  .field.inline input{width:auto} .field.inline label{margin:0;font-size:13px;font-weight:500;color:var(--ink)}
+  .modal-acts{display:flex;gap:8px;margin-top:20px}
+  .modal-acts button{flex:1;font-family:inherit;font-weight:600;font-size:14px;border-radius:11px;
+    padding:11px;cursor:pointer;border:1px solid var(--line2);background:#fff;color:var(--ink);transition:.15s}
+  .modal-acts .save{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .modal-acts .save:hover{filter:brightness(1.1)}
+  .modal-acts .del{color:var(--c-exam)} .modal-acts .del:hover{background:#fbeaea}
+
+  /* 이번 주 할 일 (강조 카드) */
+  .week-card{border:1px solid var(--line2);border-left:5px solid var(--accent);
+    background:linear-gradient(180deg,#fff,var(--paper2))}
+  .week-card h2{font-size:20px;font-weight:800}
+  .wt-prog{display:flex;align-items:center;gap:10px;margin:0 0 16px}
+  .wt-bar{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .wt-bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .35s ease}
+  .wt-prog .pct{font-size:12.5px;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+  .wt-add{display:flex;gap:8px;margin-bottom:6px}
+  .wt-add input{flex:1;font-family:inherit;font-size:14px;border:1px solid var(--line2);background:#fff;
+    border-radius:11px;padding:11px 13px;color:var(--ink)}
+  .wt-add input:focus{outline:none;border-color:var(--accent)}
+  .wt-add button{font-family:inherit;font-weight:600;font-size:13.5px;border:none;cursor:pointer;
+    background:var(--accent);color:#fff;border-radius:11px;padding:0 18px;transition:.15s}
+  .wt-add button:hover{filter:brightness(1.1)}
+  .wt-item{display:flex;align-items:center;gap:12px;padding:12px 2px;border-top:1px solid var(--line)}
+  .wt-item:first-of-type{border-top:none}
+  .wt-check{flex:0 0 22px;width:22px;height:22px;border:2px solid var(--line2);border-radius:7px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;transition:.15s}
+  .wt-check:hover{border-color:var(--accent)}
+  .wt-check.done{background:var(--accent);border-color:var(--accent)}
+  .wt-text{flex:1;font-size:15px;word-break:break-word}
+  .wt-item.done .wt-text{text-decoration:line-through;color:var(--ink-soft)}
+  .wt-del{flex:0 0 auto;border:none;background:none;color:var(--ink-soft);cursor:pointer;font-size:18px;
+    opacity:.4;padding:2px 4px;transition:.15s}
+  .wt-del:hover{opacity:1;color:var(--c-exam)}
+  .wt-empty{text-align:center;color:var(--ink-soft);padding:18px;font-size:13.5px}
+
+
+
+  /* 이번 주 일정 */
+  .week-schedule-card{background:linear-gradient(180deg,var(--paper2),#fff)}
+  .week-schedule-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .week-schedule-total{font-size:12.5px;font-weight:700;color:var(--accent);background:rgba(28,94,87,.08);border-radius:999px;padding:4px 10px;white-space:nowrap}
+
+  .week-schedule-controls{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 10px;flex-wrap:wrap}
+  .week-schedule-controls button{font-family:inherit;border:1px solid var(--line2);background:#fff;color:var(--ink-soft);
+    border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .week-schedule-controls button:hover{border-color:var(--accent);color:var(--accent);background:rgba(28,94,87,.04)}
+  .week-schedule-controls .this-week{background:var(--accent);border-color:var(--accent);color:#fff}
+  .week-schedule-controls .this-week:hover{filter:brightness(1.08);color:#fff}
+  .weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:12px}
+  .wday{border:1px solid var(--line);border-radius:15px;background:#fff;min-height:154px;padding:12px 11px;transition:.15s;position:relative;overflow:hidden}
+  .wday.today{border-color:var(--accent);box-shadow:0 0 0 3px rgba(28,94,87,.08)}
+  .wday.selday{background:linear-gradient(180deg,rgba(28,94,87,.06),#fff)}
+  .wday-head{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:10px}
+  .wday-name{font-weight:800;font-size:14px;color:var(--ink)}
+  .wday-date{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:22px;line-height:1;color:var(--accent)}
+  .wday-count{font-size:10.5px;font-weight:700;color:var(--ink-soft);background:var(--paper);border-radius:999px;padding:2px 7px;white-space:nowrap}
+  .wday-empty{font-size:12px;color:var(--ink-soft);padding-top:8px;text-align:center;opacity:.75}
+  .witem{border-top:1px dashed var(--line2);padding:8px 0 0;margin-top:8px}
+  .witem:first-of-type{border-top:none;margin-top:0;padding-top:0}
+  .witem-time{font-size:11.5px;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums;margin-bottom:2px}
+  .witem-title{font-size:13px;font-weight:700;line-height:1.35;word-break:keep-all}
+  .witem-meta{font-size:11px;color:var(--ink-soft);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .witem.done .witem-title,.witem.done .witem-time{text-decoration:line-through;color:var(--ink-soft)}
+  .wmore{font-size:11.5px;color:var(--accent);font-weight:700;margin-top:8px;text-align:center}
+  @media(max-width:960px){.weekdays{grid-template-columns:repeat(2,1fr)} .wday{min-height:130px}}
+  @media(max-width:560px){.weekdays{grid-template-columns:1fr}}
+
+
+  /* 관리 보드: 논문·심사 / 학사 카운트다운 */
+  .manage-card{background:linear-gradient(180deg,#fff,var(--paper2));border-left:5px solid var(--cat-rise)}
+  .manage-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .manage-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 16px}
+  .manage-tab{font-family:inherit;border:1px solid var(--line2);background:#fff;color:var(--ink-soft);
+    border-radius:999px;padding:8px 15px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .manage-tab:hover{border-color:var(--accent);color:var(--accent)}
+  .manage-tab.on{background:var(--cat-rise);border-color:var(--cat-rise);color:#fff}
+  .manage-panel{display:none}.manage-panel.on{display:block}
+  .manage-add{display:grid;grid-template-columns:1.5fr 130px 110px 110px auto auto;gap:8px;margin-bottom:12px}
+  .manage-add.paper{grid-template-columns:1.6fr 130px 95px 110px 120px auto auto}
+  .manage-add input,.manage-add select{font-family:inherit;font-size:13.5px;border:1px solid var(--line2);
+    background:#fff;border-radius:10px;padding:10px 11px;color:var(--ink);min-width:0}
+  .manage-add input:focus,.manage-add select:focus{outline:none;border-color:var(--accent)}
+  .manage-add button{font-family:inherit;font-weight:700;font-size:13px;border:none;cursor:pointer;background:var(--accent);
+    color:#fff;border-radius:10px;padding:0 15px;transition:.15s;white-space:nowrap}
+  .manage-add button:hover{filter:brightness(1.1)}
+  .manage-list{display:grid;gap:9px}
+  .manage-item{display:grid;grid-template-columns:76px 1fr auto;align-items:center;gap:12px;border:1px solid var(--line);
+    background:#fff;border-radius:14px;padding:12px 13px}
+  .manage-dday{font-weight:800;font-size:13px;text-align:center;border-radius:11px;padding:8px 6px;font-variant-numeric:tabular-nums;line-height:1.15}
+  .manage-dday small{display:block;font-size:9.5px;font-weight:600;opacity:.8;margin-top:2px}
+  .manage-dday.zero{background:var(--c-exam);color:#fff}.manage-dday.soon{background:var(--c-def);color:#fff}
+  .manage-dday.near{background:#EBD9C2;color:#7a4a18}.manage-dday.far{background:#EAE3D4;color:var(--ink-soft)}
+  .manage-info .title{font-weight:800;font-size:14.5px;line-height:1.35}
+  .manage-info .desc{font-size:12px;color:var(--ink-soft);margin-top:3px}
+  .mchip{display:inline-block;font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 7px;margin-left:5px;color:#fff;vertical-align:middle}
+  .mchip.status{background:var(--c-meet)}.mchip.priority-high{background:var(--c-exam)}.mchip.priority-mid{background:var(--c-def)}.mchip.priority-low{background:var(--c-note)}
+  .manage-actions{display:flex;align-items:center;gap:2px}
+  .manage-edit,.manage-del{border:none;background:none;color:var(--ink-soft);cursor:pointer;font-size:18px;opacity:.45;padding:4px 6px;transition:.15s;border-radius:7px}
+  .manage-edit{font-size:14px}
+  .manage-edit:hover{opacity:1;color:var(--accent);background:rgba(0,0,0,.04)}
+  .manage-del:hover{opacity:1;color:var(--c-exam);background:rgba(0,0,0,.04)}
+  .manage-cancel{background:#fff!important;color:var(--ink-soft)!important;border:1px solid var(--line2)!important}
+  .manage-cancel:hover{color:var(--c-exam)!important;border-color:var(--c-exam)!important;filter:none!important}
+  .manage-empty{text-align:center;color:var(--ink-soft);padding:18px;font-size:13px;border:1px dashed var(--line2);border-radius:14px;background:#fff}
+  @media(max-width:860px){.manage-add,.manage-add.paper{grid-template-columns:1fr 1fr}.manage-add button{grid-column:1/-1;padding:10px}}
+  @media(max-width:560px){.manage-add,.manage-add.paper{grid-template-columns:1fr}.manage-item{grid-template-columns:1fr}.manage-dday{text-align:left}}
+
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+
+<div class="wrap">
+  <div class="nav">
+    <div class="who">이재겸 · <b>2026학년도 1학기</b> 일정</div>
+    <div class="ctrls">
+      <button id="prevWeek" title="이전 주">◀◀</button>
+      <button id="prev" title="이전 날">◀</button>
+      <button class="today-btn" id="todayBtn">오늘</button>
+      <button id="next" title="다음 날">▶</button>
+      <button id="nextWeek" title="다음 주">▶▶</button>
+      <input type="date" id="picker">
+    </div>
+  </div>
+
+  <div class="hero">
+    <span class="week-tag" id="weekTag">—</span>
+    <div class="date-main" id="dateMain">—</div>
+    <div class="date-sub" id="dateSub">—</div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab t-all on" data-cat="all">전체</button>
+    <button class="tab t-nursing" data-cat="nursing"><span class="cdot" style="background:var(--cat-nursing)"></span>간호학과</button>
+    <button class="tab t-rise" data-cat="rise"><span class="cdot" style="background:var(--cat-rise)"></span>RISE 사업단</button>
+    <button class="tab t-personal" data-cat="personal"><span class="cdot" style="background:var(--cat-personal)"></span>개인</button>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>📋 오늘의 일정</h2>
+      <div class="sub" id="todayCount">—</div>
+      <div id="todayList"></div>
+    </div>
+
+    <div class="card delay">
+      <h2>🔔 중요한 일정</h2>
+      <div class="sub">오늘 기준 · 중요 표시한 일정만</div>
+      <div id="urgentList"></div>
+    </div>
+  </div>
+
+  <div class="card delay" style="margin-top:18px">
+    <h2>🗓 이번 주</h2>
+    <div class="sub" id="weekRange">—</div>
+    <div class="weekstrip" id="weekStrip"></div>
+    <div class="legend">
+      <span><i style="background:var(--c-lec)"></i>강의·실습</span>
+      <span><i style="background:var(--c-def)"></i>심사</span>
+      <span><i style="background:var(--c-meet)"></i>회의</span>
+      <span><i style="background:var(--c-exam)"></i>시험</span>
+      <span><i style="background:var(--c-event)"></i>행사</span>
+      <span><i style="background:var(--c-note)"></i>비고·휴일</span>
+      <span><i style="background:var(--c-other)"></i>기타</span>
+    </div>
+  </div>
+
+  <div class="card week-card" style="margin-top:18px">
+    <h2>✅ 이번 주 할 일</h2>
+    <div class="sub">이번 주에 꼭 해야 할 일들 · 브라우저에 자동 저장</div>
+    <div class="wt-prog"><div class="wt-bar"><i id="wtBar"></i></div><span class="pct" id="wtPct">0/0</span></div>
+    <div class="wt-add">
+      <input type="text" id="wtInput" placeholder="예: RISE 성과보고서 초안 작성">
+      <button id="wtAdd">추가</button>
+    </div>
+    <div id="wtList"></div>
+  </div>
+
+
+
+  <div class="card delay week-schedule-card" style="margin-top:18px">
+    <div class="week-schedule-head">
+      <div>
+        <h2>📆 이번 주 일정</h2>
+        <div class="sub" id="weekScheduleSub">선택한 날짜가 포함된 한 주의 전체 일정</div>
+      </div>
+      <div class="week-schedule-total" id="weekScheduleTotal">—</div>
+    </div>
+    <div class="week-schedule-controls">
+      <button id="weekSchedulePrev" title="저번주 보기">◀ 저번주</button>
+      <button class="this-week" id="weekScheduleThis" title="이번주로 이동">이번주</button>
+      <button id="weekScheduleNext" title="다음주 보기">다음주 ▶</button>
+    </div>
+    <div id="weekScheduleList"></div>
+  </div>
+
+
+  <div class="card delay manage-card" style="margin-top:18px">
+    <div class="manage-head">
+      <div>
+        <h2>📄 관리 보드</h2>
+        <div class="sub">논문·심사 업무와 학사 마감일을 D-day로 관리</div>
+      </div>
+    </div>
+    <div class="manage-tabs">
+      <button class="manage-tab on" data-mtab="paper">논문·심사</button>
+      <button class="manage-tab" data-mtab="academic">학사 카운트다운</button>
+    </div>
+
+    <div class="manage-panel on" id="paperPanel">
+      <div class="manage-add paper">
+        <input type="text" id="paperTitle" placeholder="예: 박진수 박사논문 3심">
+        <input type="date" id="paperDate">
+        <input type="time" id="paperTime">
+        <select id="paperCat">
+          <option value="박사심사">박사심사</option><option value="석사심사">석사심사</option>
+          <option value="논문투고">논문투고</option><option value="연구계획서">연구계획서</option><option value="기타">기타</option>
+        </select>
+        <select id="paperStatus">
+          <option value="예정">예정</option><option value="작성 중">작성 중</option>
+          <option value="심사평 작성 중">심사평 작성 중</option><option value="검토 중">검토 중</option><option value="완료">완료</option><option value="보류">보류</option>
+        </select>
+        <button id="paperAdd">추가</button>
+        <button id="paperCancel" class="manage-cancel" style="display:none">취소</button>
+      </div>
+      <div id="paperList" class="manage-list"></div>
+    </div>
+
+    <div class="manage-panel" id="academicPanel">
+      <div class="manage-add">
+        <input type="text" id="acadTitle" placeholder="예: 성적 입력 마감">
+        <input type="date" id="acadDate">
+        <select id="acadCat">
+          <option value="시험">시험</option><option value="성적">성적</option><option value="CQI">CQI</option>
+          <option value="실습">실습</option><option value="회의">회의</option><option value="행정">행정</option><option value="기타">기타</option>
+        </select>
+        <select id="acadPriority">
+          <option value="높음">높음</option><option value="보통">보통</option><option value="낮음">낮음</option>
+        </select>
+        <button id="acadAdd">추가</button>
+        <button id="acadCancel" class="manage-cancel" style="display:none">취소</button>
+      </div>
+      <div id="acadList" class="manage-list"></div>
+    </div>
+  </div>
+
+
+  <div class="card delay" style="margin-top:18px">
+    <h2>📝 메모센터</h2>
+    <div class="sub" id="memoSub">업무별 메모를 탭으로 구분하여 기록 · 브라우저에 자동 저장</div>
+    <div class="memo-tabs">
+      <button class="memo-tab on" data-memo-tab="professor">교수 메모장</button>
+      <button class="memo-tab" data-memo-tab="practice">실습위원회</button>
+      <button class="memo-tab" data-memo-tab="accreditation">간호교육인증평가</button>
+    </div>
+    <div class="memo-add">
+      <input type="text" id="memoInput" placeholder="예: 학생 상담 필요, 장비 견적 문의, 논문 아이디어">
+      <button id="memoAdd">추가</button>
+    </div>
+    <div id="memoList"></div>
+  </div>
+
+  <div class="foot">
+    데이터 기준: 「26-1_이재겸_스케쥴」 시간표 (간호학과 · 13~16주차 + 학기말)<br>
+    상단 탭으로 <b>간호학과 / RISE 사업단</b> 일정을 나눠 볼 수 있습니다. RISE 일정은 알려주시면 추가해 드립니다.<br>
+    <button class="reset-btn" id="resetEv">↺ 일정을 원본(엑셀)으로 초기화</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle">일정 추가</h3>
+    <div class="field"><label>제목</label><input type="text" id="f_title" placeholder="예: 학과 워크숍"></div>
+    <div class="field row2">
+      <div><label>분류</label>
+        <select id="f_type">
+          <option value="lec">강의·실습</option><option value="def">심사</option>
+          <option value="meet">회의</option><option value="exam">시험</option>
+          <option value="event">행사</option><option value="note">비고·휴일</option><option value="other">기타</option>
+        </select></div>
+      <div><label>구분</label>
+        <select id="f_cat"><option value="nursing">간호학과</option><option value="rise">RISE 사업단</option><option value="personal">개인</option></select></div>
+    </div>
+    <div class="field"><label>날짜</label><input type="date" id="f_date"></div>
+    <div class="field inline"><input type="checkbox" id="f_allday"><label for="f_allday">종일 (시간 없음)</label></div>
+    <div class="field row2" id="timeRow">
+      <div><label>시작</label><input type="time" id="f_start"></div>
+      <div><label>종료</label><input type="time" id="f_end"></div>
+    </div>
+    <div class="field"><label>장소 (선택)</label><input type="text" id="f_place" placeholder="예: 강의실D"></div>
+    <div class="field"><label>메모 (선택)</label><textarea id="f_memo" placeholder="예: 준비물, 참고사항, 연락할 사람 등"></textarea></div>
+    <div class="field inline"><input type="checkbox" id="f_urg"><label for="f_urg">중요한 일정에 표시</label></div>
+    <div class="modal-acts">
+      <button class="del" id="m_del" style="display:none">삭제</button>
+      <button id="m_cancel">취소</button>
+      <button class="save" id="m_save">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Firebase SDK ── -->
+<script type="module">
+// ════════════════════════════════════════════════
+//  ★ Firebase 설정값 (본인 프로젝트 키로 교체됨)
+// ════════════════════════════════════════════════
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, deleteDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDCdbb1_Z9dgxxJu49piBXtMF4Cc8ziRJ8",
+  authDomain: "project-824110386736584736.firebaseapp.com",
+  projectId: "project-824110386736584736",
+  storageBucket: "project-824110386736584736.firebasestorage.app",
+  messagingSenderId: "735157214795",
+  appId: "1:735157214795:web:c98227cd7e57ff5349b7ce",
+  measurementId: "G-106GRGBY1V"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── 동기화 헬퍼 ──────────────────────────────────
+// Firestore 문서 1개 = 전체 배열 (JSON 직렬화)
+async function fbLoad(docId, fallback){
+  try{
+    const snap = await getDoc(doc(db,"dashboard",docId));
+    if(snap.exists()) return snap.data().items ?? fallback;
+  }catch(e){ console.warn("fbLoad",docId,e); }
+  return fallback;
+}
+async function fbSave(docId, items){
+  try{ await setDoc(doc(db,"dashboard",docId),{items}); }
+  catch(e){ console.warn("fbSave",docId,e); }
+}
+// 실시간 구독: 다른 기기에서 저장 시 즉시 반영
+function fbWatch(docId, cb){
+  return onSnapshot(doc(db,"dashboard",docId), snap=>{
+    if(snap.exists()) cb(snap.data().items ?? []);
+  });
+}
+
+// ── 전역으로 노출 (기존 코드에서 사용) ──────────
+window._fb = { fbLoad, fbSave, fbWatch };
+window._fbReady = true;
+
+
+// type: lec(강의/실습) def(심사) meet(회의) exam(시험) event(행사) note(비고/휴일) other(기타)
+const EV = [
+  // 13주차 5/25~5/30
+  {d:"2026-05-25", t:"대체휴일", type:"note", all:true},
+  {d:"2026-05-26", s:"09:00", e:"13:00", t:"기본간호학실습", type:"lec"},
+  {d:"2026-05-26", s:"16:00", e:"18:00", t:"학과회의", type:"meet"},
+  {d:"2026-05-27", s:"09:00", e:"11:00", t:"기본간호학02", p:"강의실D", type:"lec"},
+  {d:"2026-05-28", s:"14:00", e:"16:00", t:"기본간호학03", p:"자연관", type:"lec"},
+  {d:"2026-05-28", s:"16:00", e:"18:00", t:"기본간호학04", p:"자연관", type:"lec"},
+  // 14주차 6/1~6/6
+  {d:"2026-06-01", s:"11:00", e:"13:00", t:"기본간호학01", p:"강의실D", type:"lec"},
+  {d:"2026-06-01", s:"17:00", e:"18:00", t:"이사·남학생 동원", type:"event"},
+  {d:"2026-06-01", t:"LMS 교수자 비교과", type:"note", all:true},
+  {d:"2026-06-02", s:"09:00", e:"13:00", t:"기본간호학실습", type:"lec"},
+  {d:"2026-06-02", s:"14:00", e:"15:00", t:"징계위원회", type:"meet"},
+  {d:"2026-06-03", s:"10:00", e:"11:00", t:"지방선거 (공휴일)", type:"note"},
+  {d:"2026-06-04", s:"10:00", e:"11:00", t:"박진수 2심", type:"def", urg:true},
+  {d:"2026-06-04", s:"13:00", e:"14:00", t:"에듀테크 컨설팅(이해듬, ZOOM)", type:"meet", urg:true},
+  {d:"2026-06-04", s:"14:00", e:"16:00", t:"기본간호학03", p:"자연관", type:"lec"},
+  {d:"2026-06-04", s:"16:00", e:"18:00", t:"기본간호학04", p:"자연관", type:"lec"},
+  // 15주차 6/8~6/13
+  {d:"2026-06-08", s:"11:00", e:"13:00", t:"기본간호학01", p:"강의실D", type:"lec"},
+  {d:"2026-06-09", s:"09:00", e:"13:00", t:"기본간호학실습", type:"lec"},
+  {d:"2026-06-09", s:"16:00", e:"18:00", t:"학과회의", type:"meet"},
+  {d:"2026-06-10", s:"09:00", e:"11:00", t:"기본간호학02", p:"강의실D", type:"lec"},
+  {d:"2026-06-11", s:"10:00", e:"11:00", t:"박진수 3심", type:"def", urg:true},
+  {d:"2026-06-11", s:"14:00", e:"16:00", t:"기본간호학03", p:"자연관", type:"lec"},
+  {d:"2026-06-11", s:"16:00", e:"18:00", t:"기본간호학04", p:"자연관", type:"lec"},
+  {d:"2026-06-11", s:"18:00", e:"19:00", t:"임수정 박사학위 2심", type:"def", urg:true},
+  {d:"2026-06-12", s:"13:00", e:"14:00", t:"시뮬레이션 교육(문성은)", type:"event", urg:true},
+  // 16주차 6/15~6/20  (기말고사 주)
+  {d:"2026-06-15", s:"11:00", e:"13:00", t:"기본간호학01", p:"강의실D", type:"lec"},
+  {d:"2026-06-16", s:"14:00", e:"16:00", t:"운영위원회", type:"meet"},
+  {d:"2026-06-16", t:"기말고사 (6/16~6/22)", type:"exam", all:true, urg:true},
+  {d:"2026-06-17", t:"기말고사", type:"exam", all:true},
+  {d:"2026-06-18", s:"17:00", e:"18:00", t:"임수정 3심", type:"def", urg:true},
+  {d:"2026-06-18", t:"기말고사", type:"exam", all:true},
+  {d:"2026-06-19", t:"기말고사", type:"exam", all:true},
+  // 6/22~
+  {d:"2026-06-22", t:"기말고사", type:"exam", all:true},
+  // 6/29~7/4
+  {d:"2026-06-29", s:"10:00", e:"11:00", t:"진로체험", type:"event"},
+  {d:"2026-06-29", t:"LMS 교수자 비교과", type:"note", all:true},
+  {d:"2026-07-01", s:"10:00", e:"11:00", t:"진로체험", type:"event"},
+];
+
+const WEEKS = [
+  // 2026-1학기 잔여 주차
+  {mon:"2026-05-25", label:"학기 13주차"},
+  {mon:"2026-06-01", label:"학기 14주차"},
+  {mon:"2026-06-08", label:"학기 15주차"},
+  {mon:"2026-06-15", label:"학기 16주차 · 기말고사"},
+  // 2026 하계방학: 6/22~8/28
+  {mon:"2026-06-22", label:"하계방학"},
+  {mon:"2026-06-29", label:"하계방학"},
+  {mon:"2026-07-06", label:"하계방학"},
+  {mon:"2026-07-13", label:"하계방학"},
+  {mon:"2026-07-20", label:"하계방학"},
+  {mon:"2026-07-27", label:"하계방학"},
+  {mon:"2026-08-03", label:"하계방학"},
+  {mon:"2026-08-10", label:"하계방학"},
+  {mon:"2026-08-17", label:"하계방학"},
+  {mon:"2026-08-24", label:"하계방학"},
+  // 2026-2학기: 8/31부터 1~16주차
+  {mon:"2026-08-31", label:"학기 1주차"},
+  {mon:"2026-09-07", label:"학기 2주차"},
+  {mon:"2026-09-14", label:"학기 3주차"},
+  {mon:"2026-09-21", label:"학기 4주차"},
+  {mon:"2026-09-28", label:"학기 5주차"},
+  {mon:"2026-10-05", label:"학기 6주차"},
+  {mon:"2026-10-12", label:"학기 7주차"},
+  {mon:"2026-10-19", label:"학기 8주차"},
+  {mon:"2026-10-26", label:"학기 9주차"},
+  {mon:"2026-11-02", label:"학기 10주차"},
+  {mon:"2026-11-09", label:"학기 11주차"},
+  {mon:"2026-11-16", label:"학기 12주차"},
+  {mon:"2026-11-23", label:"학기 13주차"},
+  {mon:"2026-11-30", label:"학기 14주차"},
+  {mon:"2026-12-07", label:"학기 15주차"},
+  {mon:"2026-12-14", label:"학기 16주차"},
+];
+
+const DOW = ["일","월","화","수","목","금","토"];
+const TYPE_LABEL = {lec:"강의",def:"심사",meet:"회의",exam:"시험",event:"행사",note:"비고",other:"기타"};
+const CAT = {nursing:{label:"간호학과",short:"간호",color:"var(--cat-nursing)"},
+             rise:{label:"RISE 사업단",short:"RISE",color:"var(--cat-rise)"},
+             personal:{label:"개인",short:"개인",color:"var(--cat-personal)"}};
+const pad = n => String(n).padStart(2,"0");
+const ymd = dt => `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
+const parse = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
+const todayStr = () => ymd(new Date());
+const LOVE_START = "2025-08-14";
+function loveDday(dstr){
+  const start = parse(LOVE_START);
+  const target = parse(dstr);
+  start.setHours(0,0,0,0); target.setHours(0,0,0,0);
+  return Math.floor((target - start) / 86400000) + 1;
+}
+
+let sel = todayStr();
+let curCat = "all";
+const $ = id => document.getElementById(id);
+
+// ── 일정: Firebase 동기화 ──
+const EV_KEY = "events";
+let events = [];
+function seedEvents(){ events = EV.map((e,i)=>({...e, id:"s"+i, cat:e.cat||"nursing", done:false})); }
+async function loadEvents(){
+  const {fbLoad,fbWatch} = window._fb;
+  const saved = await fbLoad(EV_KEY, null);
+  if(saved===null){ seedEvents(); await saveEvents(); }
+  else events = saved;
+  fbWatch(EV_KEY, items=>{ events=items; render(); });
+  render();
+}
+async function saveEvents(){
+  await window._fb.fbSave(EV_KEY, events);
+}
+
+function catChip(e){
+  if(curCat!=="all") return "";
+  return `<span class="catchip" style="background:${CAT[e.cat].color}">${CAT[e.cat].short}</span>`;
+}
+
+function mondayOf(dstr){
+  const dt = parse(dstr); const wd = dt.getDay(); // 0=일
+  const diff = (wd===0? -6 : 1-wd);
+  dt.setDate(dt.getDate()+diff); return ymd(dt);
+}
+function weekLabel(dstr){
+  const d = parse(dstr); d.setHours(0,0,0,0);
+  const summerStart = parse("2026-06-22");
+  const summerEnd = parse("2026-08-28");
+  const fallStart = parse("2026-08-31");
+  const fallEnd = parse("2026-12-20");
+
+  // 요청 반영: 6/22~8/28은 선택 날짜 기준으로 정확히 하계방학 표시
+  if(d >= summerStart && d <= summerEnd) return "하계방학";
+
+  // 요청 반영: 8/31부터 16주차까지 자동 계산
+  if(d >= fallStart && d <= fallEnd){
+    const diff = Math.floor((d - fallStart) / 86400000);
+    const weekNo = Math.floor(diff / 7) + 1;
+    return `학기 ${weekNo}주차`;
+  }
+
+  const m = mondayOf(dstr);
+  const w = WEEKS.find(x=>x.mon===m);
+  return w? w.label : "학기 외 기간";
+}
+function evOn(dstr){
+  return events.filter(e=>e.d===dstr && (curCat==="all"||e.cat===curCat)).sort((a,b)=>{
+    if(a.all&&!b.all) return 1; if(b.all&&!a.all) return -1;
+    return (a.s||"").localeCompare(b.s||"");
+  });
+}
+
+function render(){
+  const dt = parse(sel);
+  const dow = dt.getDay();
+  const loveDay = loveDday(sel);
+  document.getElementById("weekTag").innerHTML =
+    `${weekLabel(sel)} <span class="love-dday"><span class="heart">♥</span>D+${loveDay}</span>`;
+  document.getElementById("dateMain").textContent =
+    `${dt.getMonth()+1}월 ${dt.getDate()}일`;
+  document.getElementById("dateSub").innerHTML =
+    `${dt.getFullYear()}년 · <span class="date-dow">${DOW[dow]}요일</span>` +
+    (sel===todayStr()? ` · <b style="color:var(--accent)">오늘</b>`:"");
+  document.getElementById("picker").value = sel;
+
+  // 오늘 일정
+  const list = evOn(sel); const tl = document.getElementById("todayList");
+  const cnt = document.getElementById("todayCount");
+  let html = "";
+  if(list.length===0){
+    cnt.textContent = "";
+    const weekend = (dow===0||dow===6);
+    const cn = curCat==="all"? "" : CAT[curCat].label+" ";
+    html = `<div class="empty"><div class="big">${weekend?"주말입니다 ☕":cn+"일정이 없습니다"}</div>
+      <div>아래 버튼으로 일정을 추가할 수 있습니다.</div></div>`;
+  } else {
+    cnt.textContent = `${list.length}건`;
+    html = list.map(e=>{
+      const time = e.all? `<span class="time">종일<small>&nbsp;</small></span>`
+        : `<span class="time">${e.s||""}<small>${e.e?"~"+e.e:"&nbsp;"}</small></span>`;
+      return `<div class="item cat-${e.cat} ${e.done?'done':''}">
+        <span class="ev-check ${e.done?'done':''}" data-tog="${e.id}">${e.done?'✓':''}</span>
+        ${time}
+        <span class="dot b-${e.type}"></span>
+        <div class="body"><div class="t">${esc(e.t)}
+          <span class="badge b-${e.type}">${TYPE_LABEL[e.type]}</span>${catChip(e)}</div>
+          ${e.p? `<div class="meta">📍 ${esc(e.p)}</div>`:""}${e.memo? `<div class="meta">📝 ${esc(e.memo)}</div>`:""}</div>
+        <span class="ev-acts"><button data-edit="${e.id}" title="수정">✎</button>
+          <button class="del" data-del="${e.id}" title="삭제">🗑</button></span></div>`;
+    }).join("");
+  }
+  html += `<div class="addrow"><button class="add-ev" id="addEvBtn">＋ ${dt.getMonth()+1}/${dt.getDate()}에 일정 추가</button></div>`;
+  tl.innerHTML = html;
+  bindRows(tl);
+  document.getElementById("addEvBtn").onclick=()=>openAdd(sel);
+
+  // 중요한 일정 (오늘 이후, 중요 표시한 항목만)
+  const base = parse(todayStr()); base.setHours(0,0,0,0);
+  const up = events.filter(e=>e.urg===true && parse(e.d)>=base && (curCat==="all"||e.cat===curCat))
+    .sort((a,b)=> a.d===b.d? (a.s||"").localeCompare(b.s||"") : a.d.localeCompare(b.d))
+    .slice(0,10);
+  const ul = document.getElementById("urgentList");
+  const emptyMsg = curCat==="rise"
+    ? `<div class="empty"><div>RISE 사업단 일정이 아직 없습니다.<br>일정을 알려주시면 추가해 드립니다.</div></div>`
+    : `<div class="empty"><div>중요한 일정이 없습니다.</div></div>`;
+  ul.innerHTML = up.length===0? emptyMsg
+   : up.map(e=>{
+      const diff = Math.round((parse(e.d)-base)/86400000);
+      const dlabel = diff===0?"D-DAY":`D-${diff}`;
+      const cls = diff===0?"zero":diff<=3?"soon":diff<=7?"near":"far";
+      const dt2 = parse(e.d);
+      const when = `${dt2.getMonth()+1}/${dt2.getDate()}(${DOW[dt2.getDay()]}) ${e.all?"종일":e.s||""}`;
+      return `<div class="urg cat-${e.cat} ${e.done?'done':''}">
+        <span class="ev-check ${e.done?'done':''}" data-tog="${e.id}" style="margin-top:0">${e.done?'✓':''}</span>
+        <div class="dday ${cls}">${dlabel}<small>${TYPE_LABEL[e.type]}</small></div>
+        <div class="info"><div class="t">${esc(e.t)}${catChip(e)}</div><div class="d">${when}${e.memo? ` · 📝 ${esc(e.memo)}`:""}</div></div>
+        <span class="ev-acts"><button data-edit="${e.id}" title="수정">✎</button></span></div>`;
+    }).join("");
+  bindRows(ul);
+
+  // 주간 스트립
+  const m = parse(mondayOf(sel));
+  const mendStrip = new Date(m); mendStrip.setDate(m.getDate()+6);
+  document.getElementById("weekRange").textContent =
+    `${m.getMonth()+1}/${m.getDate()} ~ ${mendStrip.getMonth()+1}/${mendStrip.getDate()} · ${weekLabel(sel)}`;
+  let strip="";
+  for(let i=0;i<7;i++){
+    const dd = new Date(m); dd.setDate(m.getDate()+i); const ds = ymd(dd);
+    const evs = evOn(ds);
+    const types=[...new Set(evs.map(x=>x.type))].slice(0,4);
+    const dots = types.map(t=>`<i class="b-${t}" style="background:var(--c-${t})"></i>`).join("");
+    strip += `<div class="ws ${ds===sel?"sel":""}" data-d="${ds}">
+      <div class="dn">${DOW[dd.getDay()]}</div><div class="dd">${dd.getDate()}</div>
+      <div class="dots">${dots}</div></div>`;
+  }
+  document.getElementById("weekStrip").innerHTML = strip;
+  document.querySelectorAll(".ws").forEach(el=>el.onclick=()=>{sel=el.dataset.d;render();});
+
+  // 이번 주 일정: 요일별 카드로 표시
+  const mend = new Date(m); mend.setDate(m.getDate()+6);
+  const weekEvents = [];
+  let weekHtml = `<div class="weekdays">`;
+  for(let i=0;i<7;i++){
+    const dd = new Date(m); dd.setDate(m.getDate()+i); const ds = ymd(dd);
+    const evs = evOn(ds);
+    weekEvents.push(...evs);
+    const shown = evs.slice(0,3).map(e=>{
+      const tm = e.all ? "종일" : `${e.s||""}${e.e?"~"+e.e:""}`;
+      return `<div class="witem ${e.done?'done':''}">
+        <div class="witem-time">${tm} · ${TYPE_LABEL[e.type]}</div>
+        <div class="witem-title">${esc(e.t)}</div>
+        ${e.p?`<div class="witem-meta">📍 ${esc(e.p)}</div>`:""}${e.memo?`<div class="witem-meta">📝 ${esc(e.memo)}</div>`:""}
+      </div>`;
+    }).join("");
+    const more = evs.length>3 ? `<div class="wmore">+ ${evs.length-3}건 더 있음</div>` : "";
+    weekHtml += `<div class="wday ${ds===todayStr()?"today":""} ${ds===sel?"selday":""}" data-d="${ds}">
+      <div class="wday-head"><div><div class="wday-name">${DOW[dd.getDay()]}요일</div><div class="wday-date">${dd.getDate()}</div></div><span class="wday-count">${evs.length}건</span></div>
+      ${evs.length? shown+more : `<div class="wday-empty">일정 없음</div>`}
+    </div>`;
+  }
+  weekHtml += `</div>`;
+  document.getElementById("weekScheduleSub").textContent = `${m.getMonth()+1}/${m.getDate()} ~ ${mend.getMonth()+1}/${mend.getDate()} · ${weekLabel(sel)}`;
+  document.getElementById("weekScheduleTotal").textContent = `${weekEvents.length}건`;
+  document.getElementById("weekScheduleList").innerHTML = weekHtml;
+  document.querySelectorAll(".wday").forEach(el=>el.onclick=()=>{sel=el.dataset.d;render();});
+}
+
+function shift(n){ const dt=parse(sel); dt.setDate(dt.getDate()+n); sel=ymd(dt); render(); }
+document.getElementById("prevWeek").onclick=()=>shift(-7);
+document.getElementById("prev").onclick=()=>shift(-1);
+document.getElementById("next").onclick=()=>shift(1);
+document.getElementById("nextWeek").onclick=()=>shift(7);
+document.getElementById("todayBtn").onclick=()=>{sel=todayStr();render();};
+document.getElementById("weekSchedulePrev").onclick=()=>shift(-7);
+document.getElementById("weekScheduleNext").onclick=()=>shift(7);
+document.getElementById("weekScheduleThis").onclick=()=>{sel=todayStr();render();};
+document.getElementById("picker").onchange=e=>{sel=e.target.value;render();};
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  curCat=t.dataset.cat;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on");
+  render();
+});
+
+// ── 일정 편집 / 완료 / 추가 ──
+function bindRows(box){
+  box.querySelectorAll("[data-tog]").forEach(el=>el.onclick=()=>toggleDone(el.dataset.tog));
+  box.querySelectorAll("[data-edit]").forEach(el=>el.onclick=()=>openEdit(el.dataset.edit));
+  box.querySelectorAll("[data-del]").forEach(el=>el.onclick=()=>delEvent(el.dataset.del));
+}
+async function toggleDone(id){ const e=events.find(x=>x.id===id); if(e){ e.done=!e.done; await saveEvents(); render(); } }
+async function delEvent(id){ const e=events.find(x=>x.id===id); if(!e) return;
+  if(confirm(`'${e.t}' 일정을 삭제할까요?`)){ events=events.filter(x=>x.id!==id); await saveEvents(); render(); } }
+
+let editingId = null;
+function toggleTimeRow(){ $("timeRow").style.display = $("f_allday").checked? "none":"flex"; }
+function setForm(e){
+  $("f_title").value=e.t||""; $("f_type").value=e.type||"meet"; $("f_cat").value=e.cat||"nursing";
+  $("f_date").value=e.d||sel; $("f_allday").checked=!!e.all;
+  $("f_start").value=e.s||""; $("f_end").value=e.e||""; $("f_place").value=e.p||""; $("f_memo").value=e.memo||""; $("f_urg").checked=!!e.urg;
+  toggleTimeRow();
+}
+function openAdd(dateStr){
+  editingId=null; $("modalTitle").textContent="일정 추가"; $("m_del").style.display="none";
+  setForm({d:dateStr, type:"meet", cat:(curCat!=="all"?curCat:"nursing"), all:false, s:"09:00", e:"10:00", t:"", p:"", memo:"", urg:false});
+  $("modalBg").classList.add("open"); $("f_title").focus();
+}
+function openEdit(id){
+  const e=events.find(x=>x.id===id); if(!e) return;
+  editingId=id; $("modalTitle").textContent="일정 수정"; $("m_del").style.display="";
+  setForm(e); $("modalBg").classList.add("open");
+}
+function closeModal(){ $("modalBg").classList.remove("open"); }
+async function saveModal(){
+  const t=$("f_title").value.trim(); if(!t){ alert("제목을 입력하세요."); return; }
+  const allday=$("f_allday").checked, place=$("f_place").value.trim(), memo=$("f_memo").value.trim();
+  const data={ t, type:$("f_type").value, cat:$("f_cat").value, d:$("f_date").value, all:allday, urg:$("f_urg").checked };
+  if(!allday){ data.s=$("f_start").value; data.e=$("f_end").value; }
+  if(place) data.p=place;
+  if(memo) data.memo=memo;
+  if(editingId){ const e=events.find(x=>x.id===editingId); ["s","e","p","memo"].forEach(k=>delete e[k]); Object.assign(e, data); }
+  else { data.id="n"+Date.now(); data.done=false; events.push(data); }
+  await saveEvents(); closeModal(); render();
+}
+$("f_allday").addEventListener("change", toggleTimeRow);
+$("m_cancel").onclick=closeModal;
+$("m_save").onclick=saveModal;
+$("m_del").onclick=()=>{ if(editingId && confirm("이 일정을 삭제할까요?")){ events=events.filter(x=>x.id!==editingId); saveEvents(); closeModal(); render(); } };
+$("modalBg").onclick=ev=>{ if(ev.target.id==="modalBg") closeModal(); };
+$("resetEv").onclick=()=>{ if(confirm("추가·수정·완료 표시를 모두 지우고 원본 시간표로 되돌릴까요?")){ seedEvents(); saveEvents().then(()=>render()); } };
+loadEvents();
+
+// ── 메모센터 (Firebase 동기화) ──
+const MEMO_SECTIONS = {
+  professor: {
+    label: "교수 메모장",
+    sub: "학생 상담·개인 업무·아이디어 기록 · 클라우드 자동 저장",
+    placeholder: "예: 학생 상담 필요, 장비 견적 문의, 논문 아이디어",
+    key: "memo_professor",
+    seed: [{id:1, text:"한보의 논문 작성하기"}]
+  },
+  practice: {
+    label: "실습위원회",
+    sub: "실습기관·실습운영·평가 관련 메모 · 클라우드 자동 저장",
+    placeholder: "예: 실습기관 협약서 확인, 실습 OT 일정, 평가표 수정",
+    key: "memo_practice",
+    seed: []
+  },
+  accreditation: {
+    label: "간호교육인증평가",
+    sub: "간호교육인증평가 준비·근거자료·점검사항 메모 · 클라우드 자동 저장",
+    placeholder: "예: CQI 보고서 확인, PO 매트릭스 검토, 자체점검 자료",
+    key: "memo_accreditation",
+    seed: []
+  }
+};
+let activeMemoTab = "professor";
+let memoStore = {};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function loadMemos(){
+  const {fbLoad,fbWatch} = window._fb;
+  for(const [id, cfg] of Object.entries(MEMO_SECTIONS)){
+    const saved = await fbLoad(cfg.key, null);
+    if(saved===null){ memoStore[id]=[...cfg.seed]; await saveMemos(id); }
+    else memoStore[id]=saved;
+    fbWatch(cfg.key, items=>{ memoStore[id]=items; if(activeMemoTab===id) renderMemos(); });
+  }
+}
+async function saveMemos(tab=activeMemoTab){
+  await window._fb.fbSave(MEMO_SECTIONS[tab].key, memoStore[tab]||[]);
+}
+function switchMemoTab(tab){
+  activeMemoTab = tab;
+  document.querySelectorAll(".memo-tab").forEach(btn=>btn.classList.toggle("on", btn.dataset.memoTab===tab));
+  $("memoSub").textContent = MEMO_SECTIONS[tab].sub;
+  $("memoInput").placeholder = MEMO_SECTIONS[tab].placeholder;
+  $("memoInput").value = "";
+  renderMemos();
+}
+function renderMemos(){
+  const box=document.getElementById("memoList");
+  const memos = memoStore[activeMemoTab] || [];
+  if(memos.length===0){ box.innerHTML=`<div class="memo-empty">아직 메모가 없습니다. 위 칸에 적어 추가하세요.</div>`; return; }
+  box.innerHTML = memos.map(m=>`
+    <div class="memo-item">
+      <div class="memo-bullet"></div>
+      <div class="memo-text">${esc(m.text)}</div>
+      <button class="memo-del" data-id="${m.id}" title="삭제">×</button>
+    </div>`).join("");
+  box.querySelectorAll(".memo-del").forEach(el=>el.onclick=()=>delMemo(Number(el.dataset.id)));
+}
+async function addMemo(){
+  const i=document.getElementById("memoInput"); const t=i.value.trim();
+  if(!t) return;
+  memoStore[activeMemoTab].push({id:Date.now(), text:t}); i.value=""; await saveMemos(); renderMemos();
+}
+async function delMemo(id){
+  memoStore[activeMemoTab]=memoStore[activeMemoTab].filter(x=>x.id!==id);
+  await saveMemos(); renderMemos();
+}
+document.querySelectorAll(".memo-tab").forEach(btn=>btn.onclick=()=>switchMemoTab(btn.dataset.memoTab));
+document.getElementById("memoAdd").onclick=addMemo;
+document.getElementById("memoInput").addEventListener("keydown",e=>{ if(e.key==="Enter") addMemo(); });
+loadMemos().then(()=>{ switchMemoTab(activeMemoTab); renderMemos(); });
+
+// ── 이번 주 할 일 (Firebase 동기화) ──
+const WT_KEY = "weektodo";
+let wtodos = [];
+async function loadWT(){
+  const {fbLoad,fbWatch} = window._fb;
+  wtodos = await fbLoad(WT_KEY, []);
+  fbWatch(WT_KEY, items=>{ wtodos=items; renderWT(); });
+}
+async function saveWT(){ await window._fb.fbSave(WT_KEY, wtodos); }
+function renderWT(){
+  const box=$("wtList");
+  const done=wtodos.filter(x=>x.done).length, tot=wtodos.length;
+  $("wtPct").textContent = `${done}/${tot} 완료`;
+  $("wtBar").style.width = tot? (done/tot*100)+"%" : "0%";
+  if(tot===0){ box.innerHTML=`<div class="wt-empty">아직 등록한 일이 없습니다. 위 칸에 적어 추가하세요.</div>`; return; }
+  const sorted=[...wtodos].sort((a,b)=>(a.done?1:0)-(b.done?1:0));
+  box.innerHTML=sorted.map(w=>`
+    <div class="wt-item ${w.done?'done':''}">
+      <div class="wt-check ${w.done?'done':''}" data-id="${w.id}">${w.done?'✓':''}</div>
+      <div class="wt-text">${esc(w.text)}</div>
+      <button class="wt-del" data-id="${w.id}" title="삭제">×</button>
+    </div>`).join("");
+  box.querySelectorAll(".wt-check").forEach(el=>el.onclick=async()=>{ const w=wtodos.find(x=>x.id===el.dataset.id); if(w){ w.done=!w.done; await saveWT(); renderWT(); } });
+  box.querySelectorAll(".wt-del").forEach(el=>el.onclick=async()=>{ wtodos=wtodos.filter(x=>x.id!==el.dataset.id); await saveWT(); renderWT(); });
+}
+async function addWT(){ const i=$("wtInput"); const t=i.value.trim(); if(!t) return; wtodos.push({id:"w"+Date.now(), text:t, done:false}); i.value=""; await saveWT(); renderWT(); }
+$("wtAdd").onclick=addWT;
+$("wtInput").addEventListener("keydown",e=>{ if(e.key==="Enter") addWT(); });
+loadWT().then(()=>renderWT());
+
+
+// ── 관리 보드: 논문·심사 / 학사 카운트다운 ──
+const PAPER_KEY = "paper_board";
+const ACAD_KEY = "acad_countdown";
+let paperItems = [
+  {id:"p1", title:"박진수 박사논문 3심", date:"2026-06-11", time:"10:00", cat:"박사심사", status:"예정"},
+  {id:"p2", title:"임수정 박사학위 3심", date:"2026-06-18", time:"17:00", cat:"박사심사", status:"심사평 작성 중"}
+];
+let acadItems = [
+  {id:"a1", title:"기말고사 시작", date:"2026-06-16", cat:"시험", priority:"높음"},
+  {id:"a2", title:"기말고사 종료", date:"2026-06-22", cat:"시험", priority:"보통"},
+  {id:"a3", title:"진로체험", date:"2026-06-29", cat:"행정", priority:"보통"}
+];
+let paperEditingId = null;
+let acadEditingId = null;
+async function loadManage(){
+  const {fbLoad,fbWatch} = window._fb;
+  paperItems = await fbLoad(PAPER_KEY, paperItems);
+  acadItems  = await fbLoad(ACAD_KEY,  acadItems);
+  fbWatch(PAPER_KEY, items=>{ paperItems=items; renderPaper(); });
+  fbWatch(ACAD_KEY,  items=>{ acadItems=items;  renderAcad(); });
+}
+async function savePaper(){ await window._fb.fbSave(PAPER_KEY, paperItems); }
+async function saveAcad(){  await window._fb.fbSave(ACAD_KEY,  acadItems); }
+function ddayInfo(dateStr){
+  const base=parse(todayStr()); base.setHours(0,0,0,0);
+  const target=parse(dateStr); target.setHours(0,0,0,0);
+  const diff=Math.round((target-base)/86400000);
+  const label=diff===0?"D-DAY":(diff>0?`D-${diff}`:`D+${Math.abs(diff)}`);
+  const cls=diff===0?"zero":diff>0&&diff<=3?"soon":diff>0&&diff<=7?"near":"far";
+  return {diff,label,cls};
+}
+function renderPaper(){
+  const box=$("paperList");
+  const list=[...paperItems].sort((a,b)=>a.date===b.date?(a.time||"").localeCompare(b.time||""):a.date.localeCompare(b.date));
+  if(list.length===0){ box.innerHTML='<div class="manage-empty">등록된 논문·심사 항목이 없습니다.</div>'; return; }
+  box.innerHTML=list.map(x=>{ const d=ddayInfo(x.date); const dt=parse(x.date);
+    return `<div class="manage-item">
+      <div class="manage-dday ${d.cls}">${d.label}<small>${x.cat}</small></div>
+      <div class="manage-info"><div class="title">${esc(x.title)}<span class="mchip status">${esc(x.status)}</span></div>
+      <div class="desc">${dt.getFullYear()}.${pad(dt.getMonth()+1)}.${pad(dt.getDate())}(${DOW[dt.getDay()]}) ${x.time||""}</div></div>
+      <div class="manage-actions"><button class="manage-edit" data-paper-edit="${x.id}" title="수정">✎</button><button class="manage-del" data-paper-del="${x.id}" title="삭제">×</button></div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-paper-edit]").forEach(el=>el.onclick=()=>startEditPaper(el.dataset.paperEdit));
+  box.querySelectorAll("[data-paper-del]").forEach(el=>el.onclick=async()=>{ paperItems=paperItems.filter(x=>x.id!==el.dataset.paperDel); if(paperEditingId===el.dataset.paperDel) clearPaperForm(); await savePaper(); renderPaper(); });
+}
+function renderAcad(){
+  const box=$("acadList");
+  const list=[...acadItems].sort((a,b)=>a.date.localeCompare(b.date));
+  if(list.length===0){ box.innerHTML='<div class="manage-empty">등록된 학사 카운트다운 항목이 없습니다.</div>'; return; }
+  box.innerHTML=list.map(x=>{ const d=ddayInfo(x.date); const dt=parse(x.date);
+    const pc=x.priority==="높음"?"priority-high":x.priority==="보통"?"priority-mid":"priority-low";
+    return `<div class="manage-item">
+      <div class="manage-dday ${d.cls}">${d.label}<small>${x.cat}</small></div>
+      <div class="manage-info"><div class="title">${esc(x.title)}<span class="mchip ${pc}">${esc(x.priority)}</span></div>
+      <div class="desc">${dt.getFullYear()}.${pad(dt.getMonth()+1)}.${pad(dt.getDate())}(${DOW[dt.getDay()]})</div></div>
+      <div class="manage-actions"><button class="manage-edit" data-acad-edit="${x.id}" title="수정">✎</button><button class="manage-del" data-acad-del="${x.id}" title="삭제">×</button></div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-acad-edit]").forEach(el=>el.onclick=()=>startEditAcad(el.dataset.acadEdit));
+  box.querySelectorAll("[data-acad-del]").forEach(el=>el.onclick=async()=>{ acadItems=acadItems.filter(x=>x.id!==el.dataset.acadDel); if(acadEditingId===el.dataset.acadDel) clearAcadForm(); await saveAcad(); renderAcad(); });
+}
+function clearPaperForm(){
+  paperEditingId=null;
+  $("paperTitle").value=""; $("paperDate").value=""; $("paperTime").value="";
+  $("paperCat").value="박사심사"; $("paperStatus").value="예정";
+  $("paperAdd").textContent="추가"; $("paperCancel").style.display="none";
+}
+function startEditPaper(id){
+  const x=paperItems.find(v=>v.id===id); if(!x) return;
+  paperEditingId=id;
+  $("paperTitle").value=x.title||""; $("paperDate").value=x.date||""; $("paperTime").value=x.time||"";
+  $("paperCat").value=x.cat||"기타"; $("paperStatus").value=x.status||"예정";
+  $("paperAdd").textContent="수정 저장"; $("paperCancel").style.display=""; $("paperTitle").focus();
+}
+async function addPaper(){
+  const title=$("paperTitle").value.trim(), date=$("paperDate").value;
+  if(!title||!date){ alert("제목과 날짜를 입력하세요."); return; }
+  const data={title, date, time:$("paperTime").value, cat:$("paperCat").value, status:$("paperStatus").value};
+  if(paperEditingId){ const item=paperItems.find(x=>x.id===paperEditingId); if(item) Object.assign(item,data); }
+  else paperItems.push({id:"p"+Date.now(), ...data});
+  clearPaperForm(); await savePaper(); renderPaper();
+}
+function clearAcadForm(){
+  acadEditingId=null;
+  $("acadTitle").value=""; $("acadDate").value="";
+  $("acadCat").value="시험"; $("acadPriority").value="높음";
+  $("acadAdd").textContent="추가"; $("acadCancel").style.display="none";
+}
+function startEditAcad(id){
+  const x=acadItems.find(v=>v.id===id); if(!x) return;
+  acadEditingId=id;
+  $("acadTitle").value=x.title||""; $("acadDate").value=x.date||"";
+  $("acadCat").value=x.cat||"기타"; $("acadPriority").value=x.priority||"보통";
+  $("acadAdd").textContent="수정 저장"; $("acadCancel").style.display=""; $("acadTitle").focus();
+}
+async function addAcad(){
+  const title=$("acadTitle").value.trim(), date=$("acadDate").value;
+  if(!title||!date){ alert("제목과 날짜를 입력하세요."); return; }
+  const data={title, date, cat:$("acadCat").value, priority:$("acadPriority").value};
+  if(acadEditingId){ const item=acadItems.find(x=>x.id===acadEditingId); if(item) Object.assign(item,data); }
+  else acadItems.push({id:"a"+Date.now(), ...data});
+  clearAcadForm(); await saveAcad(); renderAcad();
+}
+document.querySelectorAll(".manage-tab").forEach(btn=>btn.onclick=()=>{
+  document.querySelectorAll(".manage-tab").forEach(x=>x.classList.remove("on")); btn.classList.add("on");
+  document.querySelectorAll(".manage-panel").forEach(x=>x.classList.remove("on"));
+  $(btn.dataset.mtab==="paper"?"paperPanel":"academicPanel").classList.add("on");
+});
+$("paperAdd").onclick=addPaper; $("acadAdd").onclick=addAcad;
+$("paperCancel").onclick=clearPaperForm; $("acadCancel").onclick=clearAcadForm;
+$("paperTitle").addEventListener("keydown",e=>{ if(e.key==="Enter") addPaper(); });
+$("acadTitle").addEventListener("keydown",e=>{ if(e.key==="Enter") addAcad(); });
+loadManage().then(()=>{ renderPaper(); renderAcad(); });
+
+// render()는 loadEvents() 내부에서 호출됨
+</script>
