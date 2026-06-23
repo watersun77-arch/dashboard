@@ -5733,8 +5733,18 @@ document.querySelectorAll(".finance-inner-tab").forEach(btn=>{
     document.querySelectorAll(".finance-inner-tab").forEach(b=>b.classList.remove("on"));
     document.querySelectorAll(".finance-section").forEach(s=>s.classList.remove("on"));
     btn.classList.add("on");
-    document.getElementById("finance"+btn.dataset.financeTab.charAt(0).toUpperCase()+btn.dataset.financeTab.slice(1)).classList.add("on");
-    if(btn.dataset.financeTab==="variable"){ initVariableMonthSelect(); const m=getSelectedMonth(); renderBudgetBars(m); renderVariableList(m); }
+    const tabId = "finance"+btn.dataset.financeTab.charAt(0).toUpperCase()+btn.dataset.financeTab.slice(1);
+    const section = document.getElementById(tabId);
+    if(section) section.classList.add("on");
+    if(btn.dataset.financeTab==="fixed"){
+      renderFixedList();
+    }
+    if(btn.dataset.financeTab==="variable"){
+      initVariableMonthSelect();
+      const m=getSelectedMonth();
+      renderBudgetBars(m);
+      renderVariableList(m);
+    }
     if(btn.dataset.financeTab==="summary") renderSummaryTable();
   };
 });
