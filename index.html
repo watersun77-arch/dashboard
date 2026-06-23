@@ -124,7 +124,7 @@
     --c-note:#8A8170;           /* 비고/휴일 */
     --c-other:#5F6B73;          /* 기타 */
     --cat-nursing:#1C5E57;      /* 간호학과 */
-    --cat-rise:#3E4C8A;         /* RISE 사업단 */
+    --cat-rise:#3E4C8A;         /* 앵커사업단 */
     --cat-personal:#B0567E;     /* 개인 */
     --shadow:0 8px 30px rgba(42,38,34,.08);
   }
@@ -1073,6 +1073,44 @@
     .login-title{ font-size:22px; }
     .login-field input{ font-size:14px; padding:12px 14px; }
     .login-btn{ font-size:14px; padding:13px; }
+
+    /* ── 금융관리 변동비 모바일 ── */
+    #variableForm > div {
+      grid-template-columns:1fr !important;
+      gap:8px;
+    }
+    #variableForm > div > div { width:100%; }
+    #vSaveBtn, #vCancelBtn {
+      width:100%; padding:11px; font-size:14px; border-radius:10px;
+    }
+    #variableBudgetBars > div {
+      grid-template-columns:1fr !important;
+      gap:4px;
+    }
+    #variableBudgetBars > div > span:first-child {
+      font-weight:800; font-size:13px;
+    }
+    #variableList > div > div {
+      grid-template-columns:70px 1fr 90px auto !important;
+      gap:6px; font-size:13px;
+    }
+    .finance-inner-tabs { gap:5px; }
+    .finance-inner-tab { padding:7px 12px; font-size:12px; }
+
+    /* ── 교수 시간표 모바일 ── */
+    .faculty-nav { gap:6px; margin:8px 0 10px; }
+    .faculty-nav .faculty-name { font-size:18px; min-width:120px; }
+    .faculty-nav button { padding:7px 10px; font-size:12px; }
+    .fac-ext-add {
+      grid-template-columns:1fr 1fr !important;
+      gap:7px;
+    }
+    .fac-ext-add button { grid-column:1/-1; padding:10px; }
+    .fac-ext-item {
+      grid-template-columns:1fr !important;
+      gap:6px; padding:10px;
+    }
+    .fac-ext-actions { justify-content:flex-start; }
   }
 
   /* ── 모바일 하단 네비게이션 바 ── */
@@ -1278,7 +1316,7 @@
     <div class="login-err" id="loginErr"></div>
     <button class="login-btn" id="loginBtn">로그인</button>
     <div class="login-footer">
-      김천대학교 간호학과 · RISE 사업단<br>
+      김천대학교 간호학과 · 앵커사업단<br>
       본 시스템은 개인 업무용으로 제작되었습니다.
     </div>
   </div>
@@ -1300,9 +1338,9 @@
     <span class="mob-ico" style="font-size:28px;color:var(--accent);">＋</span>
     <span>일정 추가</span>
   </button>
-  <button class="mob-nav-btn" id="mobNavTasks" onclick="setActiveView('tasks');updateMobNav('tasks')">
-    <span class="mob-ico">📌</span>
-    <span>할일</span>
+  <button class="mob-nav-btn" id="mobNavFinance" onclick="if(isFinanceUnlocked()){setActiveView('finance');updateMobNav('finance')}else{openFinanceLock()}">
+    <span class="mob-ico">💰</span>
+    <span>금융</span>
   </button>
   <button class="mob-nav-btn" id="mobNavMenu" onclick="document.body.classList.toggle('side-open')">
     <span class="mob-ico">☰</span>
@@ -1428,7 +1466,7 @@
   <div class="tabs" id="tabs" data-view="dashboard">
     <button class="tab t-all on" data-cat="all">전체</button>
     <button class="tab t-nursing" data-cat="nursing"><span class="cdot" style="background:var(--cat-nursing)"></span>간호학과</button>
-    <button class="tab t-rise" data-cat="rise"><span class="cdot" style="background:var(--cat-rise)"></span>RISE 사업단</button>
+    <button class="tab t-rise" data-cat="rise"><span class="cdot" style="background:var(--cat-rise)"></span>앵커사업단</button>
     <button class="tab t-personal" data-cat="personal"><span class="cdot" style="background:var(--cat-personal)"></span>개인</button>
   </div>
 
@@ -1650,7 +1688,7 @@
     <div class="contact-add second">
       <input type="text" id="contactRole" placeholder="직책/담당업무">
       <input type="text" id="contactMemo" placeholder="메모">
-      <input type="text" id="contactTags" placeholder="태그 예: 실습, 행정, RISE">
+      <input type="text" id="contactTags" placeholder="태그 예: 실습, 행정, 앵커">
       <button id="contactCancel" class="cancel" style="display:none">취소</button>
     </div>
     <div class="contact-filter">
@@ -1704,7 +1742,7 @@
     <div class="manage-tabs">
       <button class="manage-tab on" data-mtab="paper">논문·심사</button>
       <button class="manage-tab" data-mtab="academic">학사 카운트다운</button>
-      <button class="manage-tab" data-mtab="rise">RISE 사업</button>
+      <button class="manage-tab" data-mtab="rise">앵커 사업</button>
     </div>
 
     <div class="manage-panel on" id="paperPanel">
@@ -1768,7 +1806,7 @@
     <div class="sub" id="memoSub">업무별 메모를 탭으로 구분하여 기록 · 브라우저에 자동 저장</div>
     <div class="memo-tabs">
       <button class="memo-tab on" data-memo-tab="professor">교수 메모장</button>
-      <button class="memo-tab" data-memo-tab="riseMemo">RISE사업단</button>
+      <button class="memo-tab" data-memo-tab="riseMemo">앵커사업단</button>
       <button class="memo-tab" data-memo-tab="practice">실습위원회</button>
       <button class="memo-tab" data-memo-tab="studentCommittee">학생위원회</button>
       <button class="memo-tab" data-memo-tab="seniorManagement">4학년 관리</button>
@@ -1904,7 +1942,7 @@
 
   <div class="card delay" data-view="ai">
     <h2>🤖 이재겸 AI 비서</h2>
-    <div class="sub">현재 일정, 체크리스트, 논문, RISE 사업 데이터를 분석합니다.</div>
+    <div class="sub">현재 일정, 체크리스트, 논문, 앵커 사업 데이터를 분석합니다.</div>
     <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
       <button id="aiTodayBtn">오늘 브리핑</button>
       <button id="aiWeekBtn">이번주 우선순위</button>
@@ -2037,7 +2075,7 @@
           <option value="event">행사</option><option value="note">비고·휴일</option><option value="other">기타</option>
         </select></div>
       <div><label>구분</label>
-        <select id="f_cat"><option value="nursing">간호학과</option><option value="rise">RISE 사업단</option><option value="personal">개인</option></select></div>
+        <select id="f_cat"><option value="nursing">간호학과</option><option value="rise">앵커사업단</option><option value="personal">개인</option></select></div>
     </div>
     <div class="field"><label>날짜</label><input type="date" id="f_date"></div>
     <div class="field inline"><input type="checkbox" id="f_allday"><label for="f_allday">종일 (시간 없음)</label></div>
@@ -2291,7 +2329,7 @@ const DEFAULT_DASH_SETTINGS = {
   term2Weeks: 16,
   winterStart: "2026-12-21",
   winterEnd: "2027-02-28",
-  footNote: "데이터 기준: 「26-1_이재겸_스케쥴」 시간표 (간호학과 · 13~16주차 + 학기말)\n상단 탭으로 간호학과 / RISE 사업단 일정을 나눠 볼 수 있습니다."
+  footNote: "데이터 기준: 「26-1_이재겸_스케쥴」 시간표 (간호학과 · 13~16주차 + 학기말)\n상단 탭으로 간호학과 / 앵커사업단 일정을 나눠 볼 수 있습니다."
 };
 let dashSettings = {...DEFAULT_DASH_SETTINGS};
 function loadDashSettings(){
@@ -2405,7 +2443,7 @@ const WEEKS = [
 const DOW = ["일","월","화","수","목","금","토"];
 const TYPE_LABEL = {lec:"강의",def:"심사",meet:"회의",counsel:"면담",exam:"시험",event:"행사",note:"비고",other:"기타"};
 const CAT = {nursing:{label:"간호학과",short:"간호",color:"var(--cat-nursing)"},
-             rise:{label:"RISE 사업단",short:"RISE",color:"var(--cat-rise)"},
+             rise:{label:"앵커사업단",short:"앵커",color:"var(--cat-rise)"},
              personal:{label:"개인",short:"개인",color:"var(--cat-personal)"}};
 const pad = n => String(n).padStart(2,"0");
 const ymd = dt => `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
@@ -2666,7 +2704,7 @@ function render(){
     .slice(0,10);
   const ul = document.getElementById("urgentList");
   const emptyMsg = curCat==="rise"
-    ? `<div class="empty"><div>RISE 사업단 일정이 아직 없습니다.<br>일정을 알려주시면 추가해 드립니다.</div></div>`
+    ? `<div class="empty"><div>앵커사업단 일정이 아직 없습니다.<br>일정을 알려주시면 추가해 드립니다.</div></div>`
     : `<div class="empty"><div>중요한 일정이 없습니다.</div></div>`;
   ul.innerHTML = up.length===0? emptyMsg
    : up.map(e=>{
@@ -3584,8 +3622,8 @@ const MEMO_SECTIONS = {
     seed: [{id:1, text:"한보의 논문 작성하기"}]
   },
   riseMemo: {
-    label: "RISE사업단",
-    sub: "RISE 사업단 회의·과제·예산·기업연계 관련 메모 · 브라우저에 자동 저장",
+    label: "앵커사업단",
+    sub: "앵커사업단 회의·과제·예산·기업연계 관련 메모 · 브라우저에 자동 저장",
     placeholder: "메모 입력",
     key: "ljk_dash_memos_rise_v1",
     seed: []
@@ -3801,7 +3839,7 @@ $("wtInput").addEventListener("keydown",e=>{ if(e.key==="Enter") addWT(); });
 loadWT(); renderWT();
 
 
-// ── 관리 보드: 논문·심사 / 학사 카운트다운 / RISE 사업 ──
+// ── 관리 보드: 논문·심사 / 학사 카운트다운 / 앵커 사업 ──
 const PAPER_KEY = "ljk_dash_paper_board_v1";
 const ACAD_KEY = "ljk_dash_acad_countdown_v1";
 const RISE_KEY = "ljk_dash_rise_projects_v1";
@@ -3870,7 +3908,7 @@ function formatPeriod(start, end){
 function renderRise(){
   const box=$("riseList");
   const list=[...riseItems].sort((a,b)=>(a.start||"").localeCompare(b.start||""));
-  if(list.length===0){ box.innerHTML='<div class="manage-empty">등록된 RISE 사업 과제가 없습니다.</div>'; return; }
+  if(list.length===0){ box.innerHTML='<div class="manage-empty">등록된 앵커 사업 과제가 없습니다.</div>'; return; }
   box.innerHTML=list.map(x=>{
     const progress=clampProgress(x.progress);
     return `<div class="manage-item">
@@ -4848,11 +4886,11 @@ function updateViewTitle(){
     faculty:["교수 시간표","교수별 강의·실습 시간표와 외부일정을 관리합니다."],
     contacts:["연락처","자주 쓰는 내선번호와 연락처를 검색·추가·수정합니다."],
     writeDB:["작성DB","일정 추가·수정·삭제 이력을 확인합니다."],
-    work:["관리 보드","논문·심사, 학사 카운트다운, RISE 사업을 관리합니다."],
+    work:["관리 보드","논문·심사, 학사 카운트다운, 앵커 사업을 관리합니다."],
     achievement:["업적관리","연봉산정·교수종합평가용 업적을 누적 기록합니다."],
     career:["이력관리","이력서·프로필 작성에 필요한 경력 정보를 정리합니다."],
     memo:["메모센터","업무별 메모를 탭으로 구분하여 기록합니다."],
-    ai:["AI 비서","일정·논문·RISE 업무를 분석하고 우선순위를 제안합니다."],
+    ai:["AI 비서","일정·논문·앵커 업무를 분석하고 우선순위를 제안합니다."],
     finance:["금융관리","고정비·변동비·월별 요약을 관리합니다."]
   };
   const v=document.body.dataset.activeView||"dashboard";
@@ -4940,7 +4978,7 @@ function reInitAfterFirestore(){
 }
 
 function updateMobNav(view){
-  ["dashboard","schedule","tasks"].forEach(v=>{
+  ["dashboard","schedule","tasks","finance"].forEach(v=>{
     const btn = document.getElementById("mobNav"+v.charAt(0).toUpperCase()+v.slice(1));
     if(btn) btn.classList.toggle("on", v===view);
   });
