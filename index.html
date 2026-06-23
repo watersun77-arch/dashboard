@@ -4,110 +4,42 @@
 <title>오늘의 일정 · 2026-1학기 · 외부일정시간표반영</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap">
-
 <style>
 /* ── 로그인 화면 ── */
-#loginScreen{
-  position:fixed;inset:0;z-index:9999;
-  background:linear-gradient(135deg, #0f2922 0%, #1C5E57 50%, #0f3a35 100%);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Pretendard',sans-serif;
-  transition:opacity .5s ease, visibility .5s ease;
-}
+#loginScreen{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0f2922 0%,#1C5E57 50%,#0f3a35 100%);display:flex;align-items:center;justify-content:center;font-family:'Pretendard',sans-serif;transition:opacity .5s ease,visibility .5s ease;}
 #loginScreen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-
-.login-bg-deco{
-  position:absolute;inset:0;overflow:hidden;pointer-events:none;
-}
-.login-bg-deco span{
-  position:absolute;border-radius:50%;opacity:.06;
-  background:rgba(255,255,255,1);
-}
+.login-bg-deco{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.login-bg-deco span{position:absolute;border-radius:50%;opacity:.06;background:rgba(255,255,255,1);}
 .login-bg-deco span:nth-child(1){width:600px;height:600px;top:-200px;right:-150px;}
 .login-bg-deco span:nth-child(2){width:400px;height:400px;bottom:-100px;left:-100px;}
 .login-bg-deco span:nth-child(3){width:200px;height:200px;top:40%;left:10%;}
-
-.login-box{
-  position:relative;z-index:1;
-  background:rgba(255,255,255,.07);
-  backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:28px;
-  padding:48px 44px 40px;
-  width:100%;max-width:400px;
-  box-shadow:0 32px 80px rgba(0,0,0,.4);
-  animation:loginRise .6s cubic-bezier(.22,1,.36,1) both;
-}
-@keyframes loginRise{
-  from{opacity:0;transform:translateY(32px);}
-  to{opacity:1;transform:none;}
-}
-
-.login-logo{
-  width:60px;height:60px;border-radius:18px;
-  background:rgba(255,255,255,.15);
-  display:flex;align-items:center;justify-content:center;
-  font-size:28px;margin:0 auto 20px;
-}
-.login-title{
-  font-family:'Nanum Myeongjo',serif;
-  font-size:26px;font-weight:800;color:#fff;
-  text-align:center;margin-bottom:4px;letter-spacing:-.02em;
-}
-.login-sub{
-  font-size:13px;color:rgba(255,255,255,.55);
-  text-align:center;margin-bottom:32px;letter-spacing:.01em;
-}
-
+.login-box{position:relative;z-index:1;background:rgba(255,255,255,.07);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.15);border-radius:28px;padding:48px 44px 40px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,.4);animation:loginRise .6s cubic-bezier(.22,1,.36,1) both;}
+@keyframes loginRise{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:none;}}
+.login-logo{width:60px;height:60px;border-radius:18px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;}
+.login-title{font-family:'Nanum Myeongjo',serif;font-size:26px;font-weight:800;color:#fff;text-align:center;margin-bottom:4px;}
+.login-sub{font-size:13px;color:rgba(255,255,255,.55);text-align:center;margin-bottom:32px;}
 .login-field{margin-bottom:14px;}
-.login-field label{
-  display:block;font-size:11.5px;font-weight:700;
-  color:rgba(255,255,255,.55);letter-spacing:.06em;
-  margin-bottom:6px;
-}
-.login-field input{
-  width:100%;font-family:'Pretendard',sans-serif;font-size:15px;
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:13px;padding:13px 16px;color:#fff;
-  outline:none;transition:.2s;
-  -webkit-text-fill-color:#fff;
-}
+.login-field label{display:block;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.06em;margin-bottom:6px;}
+.login-field input{width:100%;font-family:'Pretendard',sans-serif;font-size:15px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:13px;padding:13px 16px;color:#fff;outline:none;transition:.2s;}
 .login-field input::placeholder{color:rgba(255,255,255,.3);}
-.login-field input:focus{
-  background:rgba(255,255,255,.15);
-  border-color:rgba(255,255,255,.45);
-  box-shadow:0 0 0 3px rgba(255,255,255,.08);
+.login-field input:focus{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.45);}
+.login-err{font-size:12.5px;font-weight:700;color:#ff8a80;text-align:center;min-height:18px;margin:8px 0 12px;}
+@keyframes loginShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
+.login-btn{width:100%;font-family:'Pretendard',sans-serif;font-size:15px;font-weight:800;background:rgba(255,255,255,.95);color:#1C5E57;border:none;border-radius:13px;padding:14px;cursor:pointer;margin-top:4px;}
+.login-btn:hover{background:#fff;}
+.login-footer{font-size:11px;color:rgba(255,255,255,.28);text-align:center;margin-top:24px;line-height:1.6;}
+/* ── 모바일 하단 네비바 ── */
+#mobileNavBar{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(42,38,34,.08);z-index:50;height:60px;}
+@media(max-width:480px){#mobileNavBar{display:flex;}.mobile-menu{display:none!important;}.main-panel{padding-bottom:72px!important;}.grid{grid-template-columns:1fr!important;}.weekdays{grid-template-columns:1fr!important;}.nav .who{font-size:11px;width:100%;}.ctrls .backup-btn,.ctrls .restore-btn,.ctrls .settings-btn,.ctrls .logout-btn,.ctrls .exit-btn,.ctrls .save-status,#storageIndicator{display:none!important;}#prevWeek,#nextWeek{display:none;}
+/* 금융관리 모바일 */
+.finance-inner-tabs{gap:5px;}
+.finance-inner-tab{padding:7px 11px;font-size:12px;}
+#variableForm>div{grid-template-columns:1fr!important;gap:8px;}
+#variableBudgetBars>div{grid-template-columns:1fr!important;}
 }
-
-.login-err{
-  font-size:12.5px;font-weight:700;color:#ff8a80;
-  text-align:center;min-height:18px;margin:8px 0 12px;
-  animation:loginShake .35s ease both;
-}
-@keyframes loginShake{
-  0%,100%{transform:translateX(0);}
-  20%{transform:translateX(-8px);}
-  40%{transform:translateX(8px);}
-  60%{transform:translateX(-5px);}
-  80%{transform:translateX(5px);}
-}
-
-.login-btn{
-  width:100%;font-family:'Pretendard',sans-serif;
-  font-size:15px;font-weight:800;
-  background:rgba(255,255,255,.95);color:#1C5E57;
-  border:none;border-radius:13px;padding:14px;
-  cursor:pointer;transition:.2s;margin-top:4px;
-  letter-spacing:.01em;
-}
-.login-btn:hover{background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.2);}
-.login-btn:active{transform:scale(.98);}
-
-.login-footer{
-  font-size:11px;color:rgba(255,255,255,.28);
-  text-align:center;margin-top:24px;line-height:1.6;
-}
+.mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;font-family:'Pretendard',sans-serif;color:var(--ink-soft);font-size:10px;font-weight:700;padding:6px 0;-webkit-tap-highlight-color:transparent;}
+.mob-nav-btn .mob-ico{font-size:20px;line-height:1;}
+.mob-nav-btn.on{color:var(--accent);}
 </style>
 
 <style>
@@ -782,6 +714,7 @@
   body[data-active-view="memo"] [data-view="memo"]{display:block!important;}
   body[data-active-view="ai"] [data-view="ai"]{display:block!important;}
   body[data-active-view="finance"] [data-view="finance"]{display:block!important;}
+  body[data-active-view="finance"] #financeCard{display:block!important;}
   /* 금융관리 비밀번호 팝업 */
   .finance-lock-bg{position:fixed;inset:0;background:rgba(42,38,34,.52);display:none;align-items:center;justify-content:center;padding:18px;z-index:200;}
   .finance-lock-bg.open{display:flex;}
@@ -804,8 +737,8 @@
   .finance-inner-tab{font-family:inherit;border:1px solid var(--line2);background:#fff;color:var(--ink-soft);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:800;cursor:pointer;transition:.15s;}
   .finance-inner-tab:hover{border-color:#3E8E5A;color:#3E8E5A;}
   .finance-inner-tab.on{background:#3E8E5A;border-color:#3E8E5A;color:#fff;}
-  .finance-section{display:none;}
-  .finance-section.on{display:block;}
+  .finance-section{display:none!important;}
+  .finance-section.on{display:block!important;}
   body[data-active-view="dashboard"] .grid[data-view="dashboard"]{display:grid!important;}
   body[data-active-view="dashboard"] .tabs[data-view="dashboard"]{display:flex!important;}
   body[data-active-view="schedule"] .weekstrip{display:grid!important;}
@@ -992,154 +925,6 @@
     .mobile-menu{padding:10px 13px;font-size:13px;}
   }
 
-  /* ── 모바일 전용 최적화 (480px 이하) ── */
-  @media(max-width:480px){
-
-    /* 헤더 컨트롤 간소화 */
-    .nav{ flex-wrap:wrap; gap:6px; margin-bottom:8px; }
-    .nav .who{ font-size:11px; width:100%; }
-    .ctrls{ flex-wrap:wrap; gap:4px; }
-    .ctrls .backup-btn,
-    .ctrls .restore-btn,
-    .ctrls .settings-btn,
-    .ctrls .logout-btn,
-    .ctrls .exit-btn,
-    .ctrls .save-status,
-    #storageIndicator{ display:none !important; }
-    .ctrls button{ padding:7px 10px; font-size:12px; }
-    #prevWeek, #nextWeek{ display:none; }
-
-    /* 경고 배너 */
-    #storageWarningBanner{ font-size:12px; padding:8px 12px; }
-
-    /* 대시보드 히어로 */
-    .hero{ padding:14px 16px; border-radius:14px; }
-    .date-main{ font-size:clamp(28px,8vw,40px); }
-    .date-sub{ font-size:12px; }
-    .week-tag{ font-size:11px; }
-
-    /* 탭 버튼 */
-    .tabs{ gap:5px; }
-    .tab{ padding:6px 11px; font-size:12px; }
-
-    /* 카드 */
-    .card{ padding:13px 13px 14px; border-radius:13px; }
-    .card h2{ font-size:16px; }
-
-    /* 대시보드 그리드 → 1열 */
-    .grid{ grid-template-columns:1fr !important; gap:10px; }
-
-    /* 일정 아이템 */
-    .item{ gap:8px; padding:10px 0; }
-    .time{ flex-basis:44px; font-size:12.5px; }
-    .body .t{ font-size:14px; }
-    .body .meta{ font-size:11px; }
-    .ev-acts button{ font-size:12px; padding:4px 5px; }
-
-    /* 주간 스트립 */
-    .weekstrip{ gap:3px; }
-    .ws{ padding:5px 2px; min-height:46px; border-radius:9px; }
-    .ws .dn{ font-size:9.5px; }
-    .ws .dd{ font-size:14px; }
-
-    /* 주간 뷰 → 세로 1열 */
-    .weekdays{ grid-template-columns:1fr !important; gap:6px; }
-    .wday{ min-height:auto !important; padding:10px; border-radius:12px; }
-    .wday-date{ font-size:17px; }
-    .wday-name{ font-size:12px; }
-
-    /* 일정 모달 */
-    .modal{ padding:18px 14px; border-radius:18px; max-height:92vh; }
-    .modal h3{ font-size:17px; margin-bottom:12px; }
-    .field label{ font-size:11.5px; }
-    .field input,.field select,.field textarea{ font-size:14px; padding:9px 11px; }
-    .field.row2{ grid-template-columns:1fr !important; gap:8px; }
-    .modal-acts{ gap:8px; }
-    .modal-acts button{ padding:11px; font-size:13px; }
-
-    /* 일정 추가 버튼 */
-    .add-ev{ font-size:12px; padding:7px 12px; }
-
-    /* 중요 일정 D-day */
-    .dday{ min-width:42px; font-size:11.5px; padding:5px 6px; }
-    .urg .info .t{ font-size:13px; }
-    .urg .info .d{ font-size:11px; }
-
-    /* 하단 여백 (모바일 네비바 공간) */
-    .main-panel{ padding-bottom:72px !important; }
-
-    /* 로그인 화면 */
-    .login-box{ padding:32px 22px 28px; border-radius:20px; }
-    .login-title{ font-size:22px; }
-    .login-field input{ font-size:14px; padding:12px 14px; }
-    .login-btn{ font-size:14px; padding:13px; }
-
-    /* ── 금융관리 변동비 모바일 ── */
-    #variableForm > div {
-      grid-template-columns:1fr !important;
-      gap:8px;
-    }
-    #variableForm > div > div { width:100%; }
-    #vSaveBtn, #vCancelBtn {
-      width:100%; padding:11px; font-size:14px; border-radius:10px;
-    }
-    #variableBudgetBars > div {
-      grid-template-columns:1fr !important;
-      gap:4px;
-    }
-    #variableBudgetBars > div > span:first-child {
-      font-weight:800; font-size:13px;
-    }
-    #variableList > div > div {
-      grid-template-columns:70px 1fr 90px auto !important;
-      gap:6px; font-size:13px;
-    }
-    .finance-inner-tabs { gap:5px; }
-    .finance-inner-tab { padding:7px 12px; font-size:12px; }
-
-    /* ── 교수 시간표 모바일 ── */
-    .faculty-nav { gap:6px; margin:8px 0 10px; }
-    .faculty-nav .faculty-name { font-size:18px; min-width:120px; }
-    .faculty-nav button { padding:7px 10px; font-size:12px; }
-    .fac-ext-add {
-      grid-template-columns:1fr 1fr !important;
-      gap:7px;
-    }
-    .fac-ext-add button { grid-column:1/-1; padding:10px; }
-    .fac-ext-item {
-      grid-template-columns:1fr !important;
-      gap:6px; padding:10px;
-    }
-    .fac-ext-actions { justify-content:flex-start; }
-  }
-
-  /* ── 모바일 하단 네비게이션 바 ── */
-  #mobileNavBar{
-    display:none;
-    position:fixed;
-    bottom:0;left:0;right:0;
-    background:#fff;
-    border-top:1px solid var(--line);
-    box-shadow:0 -4px 16px rgba(42,38,34,.08);
-    z-index:50;
-    padding:0;
-    height:60px;
-  }
-  @media(max-width:480px){
-    #mobileNavBar{ display:flex; }
-    .mobile-menu{ display:none !important; }
-  }
-  .mob-nav-btn{
-    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:3px;border:none;background:none;cursor:pointer;
-    font-family:'Pretendard',sans-serif;color:var(--ink-soft);
-    font-size:10px;font-weight:700;padding:6px 0;transition:.15s;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .mob-nav-btn .mob-ico{ font-size:20px;line-height:1; }
-  .mob-nav-btn.on{ color:var(--accent); }
-  .mob-nav-btn.on .mob-ico{ transform:scale(1.1); }
-
 
   /* ── 세로 모니터용: 일정 탭 날짜 칸 확장 ──
      일정 탭에서 주간/월간 날짜 칸을 길게 확보하고,
@@ -1292,61 +1077,35 @@
 </style>
 
 
-<!-- ── 로그인 화면 ── -->
+<!-- 로그인 화면 -->
 <div id="loginScreen">
-  <div class="login-bg-deco">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="login-bg-deco"><span></span><span></span><span></span></div>
   <div class="login-box">
     <div class="login-logo">📅</div>
     <div class="login-title">이재겸 교수</div>
     <div class="login-sub">개인 업무 대시보드 · 2026학년도</div>
-    <div class="login-field">
-      <label>아이디</label>
-      <input type="text" id="loginId" placeholder="아이디 입력" autocomplete="username" spellcheck="false">
-    </div>
-    <div class="login-field">
-      <label>비밀번호</label>
-      <input type="password" id="loginPw" placeholder="비밀번호 입력" autocomplete="current-password">
-    </div>
+    <div class="login-field"><label>아이디</label><input type="text" id="loginId" placeholder="아이디 입력" autocomplete="username" spellcheck="false"></div>
+    <div class="login-field"><label>비밀번호</label><input type="password" id="loginPw" placeholder="비밀번호 입력" autocomplete="current-password"></div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
       <input type="checkbox" id="rememberIdChk" style="width:16px;height:16px;accent-color:rgba(255,255,255,.8);cursor:pointer;flex:0 0 auto;">
       <label for="rememberIdChk" style="font-size:13px;color:rgba(255,255,255,.55);cursor:pointer;user-select:none;">아이디 저장</label>
     </div>
     <div class="login-err" id="loginErr"></div>
     <button class="login-btn" id="loginBtn">로그인</button>
-    <div class="login-footer">
-      김천대학교 간호학과 · 앵커사업단<br>
-      본 시스템은 개인 업무용으로 제작되었습니다.
-    </div>
+    <div class="login-footer">김천대학교 간호학과 · 앵커사업단<br>본 시스템은 개인 업무용으로 제작되었습니다.</div>
   </div>
 </div>
 
-<button class="mobile-menu" id="mobileMenuBtn">☰ 메뉴</button>
-
-<!-- 모바일 하단 네비게이션 바 -->
+<!-- 모바일 하단 네비바 -->
 <div id="mobileNavBar">
-  <button class="mob-nav-btn on" id="mobNavDashboard" onclick="setActiveView('dashboard');updateMobNav('dashboard')">
-    <span class="mob-ico">🏠</span>
-    <span>대시보드</span>
-  </button>
-  <button class="mob-nav-btn" id="mobNavSchedule" onclick="setActiveView('schedule');updateMobNav('schedule')">
-    <span class="mob-ico">📅</span>
-    <span>일정</span>
-  </button>
-  <button class="mob-nav-btn" id="mobNavAdd" onclick="setActiveView('dashboard');openAdd(sel)">
-    <span class="mob-ico" style="font-size:28px;color:var(--accent);">＋</span>
-    <span>일정 추가</span>
-  </button>
-  <button class="mob-nav-btn" id="mobNavFinance" onclick="if(isFinanceUnlocked()){setActiveView('finance');updateMobNav('finance')}else{openFinanceLock()}">
-    <span class="mob-ico">💰</span>
-    <span>금융</span>
-  </button>
-  <button class="mob-nav-btn" id="mobNavMenu" onclick="document.body.classList.toggle('side-open')">
-    <span class="mob-ico">☰</span>
-    <span>메뉴</span>
-  </button>
+  <button class="mob-nav-btn on" id="mobNavDashboard" onclick="setActiveView('dashboard');updateMobNav('dashboard')"><span class="mob-ico">🏠</span><span>대시보드</span></button>
+  <button class="mob-nav-btn" id="mobNavSchedule" onclick="setActiveView('schedule');updateMobNav('schedule')"><span class="mob-ico">📅</span><span>일정</span></button>
+  <button class="mob-nav-btn" id="mobNavAdd" onclick="setActiveView('dashboard');openAdd(sel)"><span class="mob-ico" style="font-size:28px;color:var(--accent);">＋</span><span>일정 추가</span></button>
+  <button class="mob-nav-btn" id="mobNavFinance" onclick="if(isFinanceUnlocked()){setActiveView('finance');updateMobNav('finance');renderFinance();}else{openFinanceLock()}"><span class="mob-ico">💰</span><span>금융</span></button>
+  <button class="mob-nav-btn" id="mobNavMenu" onclick="document.body.classList.toggle('side-open')"><span class="mob-ico">☰</span><span>메뉴</span></button>
 </div>
+
+<button class="mobile-menu" id="mobileMenuBtn">☰ 메뉴</button>
 <div class="app-shell">
   <aside class="side" id="sideNav">
     <div class="side-brand">
@@ -1955,7 +1714,7 @@
   </div>
 
   <!-- 금융관리 탭 -->
-  <div class="card finance-card" data-view="finance">
+  <div class="card finance-card" id="financeCard" style="display:none;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
       <h2>💰 금융관리</h2>
       <button id="financeChangePwBtn" style="font-family:inherit;font-size:12px;color:var(--ink-soft);background:#fff;border:1px solid var(--line2);border-radius:999px;padding:5px 12px;cursor:pointer;">🔑 비밀번호 변경</button>
@@ -2168,104 +1927,6 @@
     </div>
   </div>
 </div>
-
-<!-- Firebase SDK -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA0R_n_6R6MqUpoxPom4yLfrU51duZgiQc",
-  authDomain: "jklee-dashboard.firebaseapp.com",
-  projectId: "jklee-dashboard",
-  storageBucket: "jklee-dashboard.firebasestorage.app",
-  messagingSenderId: "921721763413",
-  appId: "1:921721763413:web:f3491f8c316ce24fa1c6dc"
-};
-
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
-const DOC_REF = doc(db, "dashboard", "jklee");
-
-// 전역으로 노출
-window._db      = db;
-window._docRef  = DOC_REF;
-window._setDoc  = setDoc;
-window._getDoc  = getDoc;
-window._fsReady = true;
-
-// Firestore → localStorage 로드 (최초 1회)
-async function loadFromFirestore(){
-  try{
-    const snap = await getDoc(DOC_REF);
-    if(snap.exists()){
-      const data = snap.data();
-      const keys = [
-        "ljk_dash_events_v1","ljk_dash_weektodo_v1",
-        "ljk_dash_paper_board_v1","ljk_dash_acad_countdown_v1","ljk_dash_rise_projects_v1",
-        "ljk_dash_memos_professor_v1","ljk_dash_memos_rise_v1","ljk_dash_memos_practice_committee_v1",
-        "ljk_dash_memos_student_committee_v1","ljk_dash_memos_senior_management_v1",
-        "ljk_dash_memos_accreditation_v1","ljk_dash_memos_student_counseling_v1",
-        "ljk_dash_contacts_v1","ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
-        "ljk_dash_settings_v1","ljk_dash_last_backup_at_v1",
-        "ljk_finance_fixed_v1","ljk_finance_variable_v1","ljk_finance_budget_v1",
-        "ljk_dash_student_counseling_items_v1","ljk_dash_research_items_v1",
-        "ljk_dash_achievement_items_v1","ljk_dash_career_items_v1",
-        "nursing_head_dash_faculty_timetable_v1","nursing_head_dash_faculty_index_v1",
-        "nursing_head_dash_faculty_external_events_v1","ljk_dash_manage_v1"
-      ];
-      let updated = false;
-      keys.forEach(k=>{
-        if(data[k] !== undefined){
-          localStorage.setItem(k, typeof data[k]==="string" ? data[k] : JSON.stringify(data[k]));
-          updated = true;
-        }
-      });
-      if(updated) console.log("✅ Firestore에서 데이터 복원 완료");
-    } else {
-      console.log("ℹ️ Firestore에 저장된 데이터 없음 (첫 사용)");
-    }
-  }catch(e){
-    console.warn("⚠️ Firestore 로드 실패:", e.message);
-  }
-}
-
-// localStorage → Firestore 저장
-window.saveToFirestore = async function(){
-  if(!window._fsReady) return;
-  try{
-    const keys = [
-      "ljk_dash_events_v1","ljk_dash_weektodo_v1",
-      "ljk_dash_paper_board_v1","ljk_dash_acad_countdown_v1","ljk_dash_rise_projects_v1",
-      "ljk_dash_memos_professor_v1","ljk_dash_memos_rise_v1","ljk_dash_memos_practice_committee_v1",
-      "ljk_dash_memos_student_committee_v1","ljk_dash_memos_senior_management_v1",
-      "ljk_dash_memos_accreditation_v1","ljk_dash_memos_student_counseling_v1",
-      "ljk_dash_contacts_v1","ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
-      "ljk_dash_settings_v1","ljk_dash_last_backup_at_v1",
-      "ljk_finance_fixed_v1","ljk_finance_variable_v1","ljk_finance_budget_v1",
-      "ljk_dash_student_counseling_items_v1","ljk_dash_research_items_v1",
-      "ljk_dash_achievement_items_v1","ljk_dash_career_items_v1",
-      "nursing_head_dash_faculty_timetable_v1","nursing_head_dash_faculty_index_v1",
-      "nursing_head_dash_faculty_external_events_v1","ljk_dash_manage_v1"
-    ];
-    const payload = { updatedAt: new Date().toISOString() };
-    keys.forEach(k=>{
-      const v = localStorage.getItem(k);
-      if(v !== null) payload[k] = v;
-    });
-    await setDoc(DOC_REF, payload, { merge: true });
-    console.log("☁️ Firestore 저장 완료");
-  }catch(e){
-    console.warn("⚠️ Firestore 저장 실패:", e.message);
-  }
-};
-
-// 페이지 로드 시 Firestore에서 먼저 불러오기
-await loadFromFirestore();
-// 로드 완료 후 대시보드 초기화 신호
-window._fsLoaded = true;
-window.dispatchEvent(new Event("fsLoaded"));
-</script>
 
 <script>
 // ── 일정 데이터 (엑셀에서 추출) ─────────────────────────────
@@ -2584,29 +2245,20 @@ function formatBackupDateTime(dateObj){
 function renderAutoSaveStatus(){
   const el = $("saveStatus");
   if(!el) return;
-  const cloud = window._fsReady ? " · ☁️" : "";
   const backupAt = localStorage.getItem(LAST_BACKUP_KEY);
   if(backupAt){
     const d = new Date(backupAt);
     if(!isNaN(d.getTime())){
-      el.innerHTML = `💾 최근 백업 <b>${formatBackupDateTime(d)}</b>${cloud}`;
+      el.innerHTML = `💾 최근 백업 <b>${formatBackupDateTime(d)}</b>`;
       return;
     }
   }
-  el.innerHTML = `💾 최근 백업 없음${cloud}`;
+  el.textContent = "💾 최근 백업 없음";
 }
-// ── Firestore 자동 저장 (디바운스 3초) ──
-let _fsSaveTimer = null;
-function scheduleFsSave(){
-  if(!window.saveToFirestore) return;
-  clearTimeout(_fsSaveTimer);
-  _fsSaveTimer = setTimeout(()=>{ window.saveToFirestore(); }, 3000);
-}
-
 function markSaved(){
+  // 데이터 변경 시 localStorage에는 즉시 자동저장되지만, 상단 시간은 JSON 백업 시각만 표시합니다.
   renderAutoSaveStatus();
   checkStorageWarning();
-  scheduleFsSave();
 }
 function markBackupSaved(dateObj=new Date()){
   try{ localStorage.setItem(LAST_BACKUP_KEY, dateObj.toISOString()); }catch(e){}
@@ -4937,64 +4589,6 @@ render = function(){ _renderOriginal(); updateSidebarSummary(); updateViewTitle(
 render();
 initSidebarView();
 
-// Firestore 로드 완료 시 전체 데이터 재초기화
-function reInitAfterFirestore(){
-  loadEvents();
-  loadDashSettings();
-  applyDashSettingsToHeader();
-
-  try{ const r=localStorage.getItem(WT_KEY); wtodos=r?JSON.parse(r):[]; if(!Array.isArray(wtodos)) wtodos=[]; }catch(e){ wtodos=[]; }
-  try{ const r=localStorage.getItem(PAPER_KEY); paperItems=r?JSON.parse(r):[]; if(!Array.isArray(paperItems)) paperItems=[]; }catch(e){ paperItems=[]; }
-  try{ const r=localStorage.getItem(ACAD_KEY); acadItems=r?JSON.parse(r):[]; if(!Array.isArray(acadItems)) acadItems=[]; }catch(e){ acadItems=[]; }
-  try{ const r=localStorage.getItem(RISE_KEY); riseItems=r?JSON.parse(r):[]; if(!Array.isArray(riseItems)) riseItems=[]; }catch(e){ riseItems=[]; }
-  try{ const r=localStorage.getItem(CONTACT_KEY); contactItems=r?JSON.parse(r):[]; if(!Array.isArray(contactItems)) contactItems=[]; }catch(e){ contactItems=[]; }
-  try{ const r=localStorage.getItem(PRACTICE_STUDENT_KEY); practiceStudents=r?JSON.parse(r):[]; if(!Array.isArray(practiceStudents)) practiceStudents=[]; }catch(e){ practiceStudents=[]; }
-  try{ const r=localStorage.getItem(WRITE_DB_KEY); writeDbLogs=r?JSON.parse(r):[]; if(!Array.isArray(writeDbLogs)) writeDbLogs=[]; }catch(e){ writeDbLogs=[]; }
-  try{ const r=localStorage.getItem(COUNSELING_KEY); counselingItems=r?JSON.parse(r):[]; if(!Array.isArray(counselingItems)) counselingItems=[]; }catch(e){ counselingItems=[]; }
-  try{ const r=localStorage.getItem(RESEARCH_KEY); researchItems=r?JSON.parse(r):[]; if(!Array.isArray(researchItems)) researchItems=[]; }catch(e){ researchItems=[]; }
-  try{ const r=localStorage.getItem(ACHIEVEMENT_KEY); achievementItems=r?JSON.parse(r):[]; if(!Array.isArray(achievementItems)) achievementItems=[]; }catch(e){ achievementItems=[]; }
-  try{ const r=localStorage.getItem(CAREER_KEY); careerItems=r?JSON.parse(r):[]; if(!Array.isArray(careerItems)) careerItems=[]; }catch(e){ careerItems=[]; }
-
-  render();
-  renderWT();
-  loadManage();
-  if(typeof renderPaper==="function") renderPaper();
-  if(typeof renderAcad==="function") renderAcad();
-  if(typeof renderRise==="function") renderRise();
-  if(typeof renderWriteDbLogs==="function") renderWriteDbLogs();
-  if(typeof renderPapers==="function") renderPapers();
-  if(typeof renderAcads==="function") renderAcads();
-  if(typeof renderRises==="function") renderRises();
-  if(typeof renderMemo==="function") renderMemo();
-  if(typeof renderContacts==="function") renderContacts();
-  if(typeof renderPracticeStudents==="function") renderPracticeStudents();
-  if(typeof renderCounselingItems==="function") renderCounselingItems();
-  if(typeof renderResearchItems==="function") renderResearchItems();
-  if(typeof renderAchievements==="function") renderAchievements();
-  if(typeof renderCareers==="function") renderCareers();
-  renderAutoSaveStatus();
-  updateSidebarSummary();
-  console.log("🔄 Firestore 데이터로 화면 재초기화 완료");
-}
-
-function updateMobNav(view){
-  ["dashboard","schedule","tasks","finance"].forEach(v=>{
-    const btn = document.getElementById("mobNav"+v.charAt(0).toUpperCase()+v.slice(1));
-    if(btn) btn.classList.toggle("on", v===view);
-  });
-}
-
-// setActiveView 후 모바일 네비바도 업데이트
-const _setActiveViewOrig = setActiveView;
-setActiveView = function(view){
-  _setActiveViewOrig(view);
-  updateMobNav(view);
-};
-
-window.addEventListener("fsLoaded", ()=>{
-  reInitAfterFirestore();
-});
-
 function parseAIAnswerToObject(answer){
   if(!answer) return null;
   if(typeof answer === "object") return answer;
@@ -5333,7 +4927,7 @@ setTimeout(()=>{
 // ── 금융관리 비밀번호 ──────────────────────────────────────
 const FINANCE_PW_KEY  = "ljk_finance_pw_hash_v1";
 const FINANCE_SESS_KEY = "ljk_finance_unlocked_v1";
-const FINANCE_DEFAULT_HASH = "fe2592b42a727e977f055947385b709cc82b16b9a87f88c6abf3900d65d0cdc3"; // SHA-256("4321")
+const FINANCE_DEFAULT_HASH = "fe2592b42a727e977f055947385b709cc82b16b9a87f88c6abf3900d65d0cdc3"; // SHA-256("2580")
 
 async function sha256(str){
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
@@ -5454,9 +5048,24 @@ let financeBudget   = {};
 let financeEditingVarId = null;
 
 function loadFinanceData(){
-  try{ const r=localStorage.getItem(FINANCE_FIXED_KEY); financeFixed = r ? JSON.parse(r) : JSON.parse(JSON.stringify(DEFAULT_FIXED)); }catch(e){ financeFixed=JSON.parse(JSON.stringify(DEFAULT_FIXED)); }
+  try{
+    const r = localStorage.getItem(FINANCE_FIXED_KEY);
+    if(r){ financeFixed = JSON.parse(r); }
+    else{
+      // 최초 실행 시 DEFAULT_FIXED를 localStorage에 저장
+      financeFixed = JSON.parse(JSON.stringify(DEFAULT_FIXED));
+      localStorage.setItem(FINANCE_FIXED_KEY, JSON.stringify(financeFixed));
+    }
+  }catch(e){ financeFixed = JSON.parse(JSON.stringify(DEFAULT_FIXED)); }
   try{ const r=localStorage.getItem(FINANCE_VARIABLE_KEY); financeVariable = r ? JSON.parse(r) : []; }catch(e){ financeVariable=[]; }
-  try{ const r=localStorage.getItem(FINANCE_BUDGET_KEY); financeBudget = r ? JSON.parse(r) : JSON.parse(JSON.stringify(DEFAULT_BUDGET)); }catch(e){ financeBudget=JSON.parse(JSON.stringify(DEFAULT_BUDGET)); }
+  try{
+    const r = localStorage.getItem(FINANCE_BUDGET_KEY);
+    if(r){ financeBudget = JSON.parse(r); }
+    else{
+      financeBudget = JSON.parse(JSON.stringify(DEFAULT_BUDGET));
+      localStorage.setItem(FINANCE_BUDGET_KEY, JSON.stringify(financeBudget));
+    }
+  }catch(e){ financeBudget = JSON.parse(JSON.stringify(DEFAULT_BUDGET)); }
 }
 function saveFinanceData(){
   localStorage.setItem(FINANCE_FIXED_KEY, JSON.stringify(financeFixed));
@@ -5542,17 +5151,13 @@ function fixedItemRow(item, catColor, showCat=false){
   const catBadge = showCat
     ? `<span style="font-size:10px;font-weight:900;background:${c};color:#fff;border-radius:999px;padding:2px 8px;white-space:nowrap;">${item.category}</span>`
     : '';
-  return `<div style="padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:#fff;margin-bottom:5px;">
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-      <span style="flex:0 0 42px;font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;">${item.date}</span>
-      ${showCat ? `<span style="flex:0 0 auto;">${catBadge}</span>` : ''}
-      <span style="flex:1;font-size:14px;font-weight:700;min-width:80px;">${item.name}</span>
-      <span style="flex:0 0 auto;font-size:14px;font-weight:900;color:#3E8E5A;font-variant-numeric:tabular-nums;white-space:nowrap;">${fmtMoney(item.amount)}</span>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;padding-left:50px;">
-      <span style="font-size:11.5px;color:var(--ink-soft);">${item.account}</span>
-      <button onclick="editFixedItem('${item.id}')" style="font-family:'Pretendard',sans-serif;font-size:11px;color:var(--accent);background:rgba(28,94,87,.08);border:none;border-radius:7px;padding:4px 8px;cursor:pointer;">수정</button>
-    </div>
+  return `<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:11px;background:#fff;margin-bottom:5px;">
+    <span style="flex:0 0 42px;font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;">${item.date}</span>
+    ${showCat ? `<span style="flex:0 0 46px;">${catBadge}</span>` : ''}
+    <span style="flex:1;font-size:14px;font-weight:700;">${item.name}</span>
+    <span style="flex:0 0 120px;font-size:14px;font-weight:900;color:#3E8E5A;text-align:right;font-variant-numeric:tabular-nums;">${fmtMoney(item.amount)}</span>
+    <span style="flex:0 0 90px;font-size:12px;color:var(--ink-soft);text-align:center;">${item.account}</span>
+    <button onclick="editFixedItem('${item.id}')" style="flex:0 0 auto;font-family:'Pretendard',sans-serif;font-size:11px;color:var(--accent);background:rgba(28,94,87,.08);border:none;border-radius:7px;padding:4px 8px;cursor:pointer;">수정</button>
   </div>`;
 }
 
@@ -5705,24 +5310,73 @@ function renderSummaryTable(){
   if(!box) return;
   const fixedTotal = financeFixed.reduce((s,x)=>s+Number(x.amount),0);
   const months = [...new Set(financeVariable.map(x=>x.month))].sort((a,b)=>b.localeCompare(a)).slice(0,6);
-  if(!months.length){ box.innerHTML=`<div style="text-align:center;color:var(--ink-soft);padding:24px;font-size:13px;">변동비 데이터가 없습니다. 변동비 탭에서 지출을 입력하세요.</div>`; return; }
-  let html = `<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;">
-    <thead><tr style="background:var(--paper2);">
-      <th style="padding:10px 12px;text-align:left;border-bottom:2px solid var(--line2);font-weight:900;">월</th>
-      <th style="padding:10px 12px;text-align:right;border-bottom:2px solid var(--line2);font-weight:900;">고정비</th>
-      <th style="padding:10px 12px;text-align:right;border-bottom:2px solid var(--line2);font-weight:900;">변동비</th>
-      <th style="padding:10px 12px;text-align:right;border-bottom:2px solid var(--line2);font-weight:900;color:#3E8E5A;">합계</th>
-    </tr></thead><tbody>`;
+  if(!months.length){
+    box.innerHTML=`<div style="text-align:center;color:var(--ink-soft);padding:24px;font-size:13px;">변동비 데이터가 없습니다. 변동비 탭에서 지출을 입력하세요.</div>`;
+    return;
+  }
+  const cats = Object.keys(financeBudget);
+  let html = `<div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="background:var(--paper2);">
+          <th style="padding:10px 12px;text-align:left;border-bottom:2px solid var(--line2);font-weight:900;white-space:nowrap;">항목</th>`;
+  months.forEach(m=>{
+    html += `<th style="padding:10px 12px;text-align:right;border-bottom:2px solid var(--line2);font-weight:900;white-space:nowrap;">${m.replace("-","년 ")}월</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  // 고정비 행
+  html += `<tr style="background:rgba(28,94,87,.04);border-bottom:1px solid var(--line);">
+    <td style="padding:10px 12px;font-weight:900;color:var(--accent);">💰 고정비</td>`;
+  months.forEach(()=>{
+    html += `<td style="padding:10px 12px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums;">${fmtMoney(fixedTotal)}</td>`;
+  });
+  html += `</tr>`;
+
+  // 변동비 구분선
+  html += `<tr style="background:rgba(0,0,0,.02);">
+    <td colspan="${months.length+1}" style="padding:6px 12px;font-size:11px;font-weight:900;color:var(--ink-soft);letter-spacing:.05em;">변동비 카테고리별</td>
+  </tr>`;
+
+  // 카테고리별 변동비 행
+  cats.forEach(cat=>{
+    const budget = financeBudget[cat] || 0;
+    const hasData = months.some(m=> financeVariable.filter(x=>x.month===m&&x.category===cat).reduce((s,x)=>s+Number(x.amount),0) > 0);
+    html += `<tr style="border-bottom:1px solid var(--line);">
+      <td style="padding:8px 12px;color:var(--ink-soft);font-size:12px;">
+        ${cat}
+        <span style="font-size:10px;color:var(--ink-soft);opacity:.6;">(예산 ${fmtMoney(budget)})</span>
+      </td>`;
+    months.forEach(m=>{
+      const spent = financeVariable.filter(x=>x.month===m&&x.category===cat).reduce((s,x)=>s+Number(x.amount),0);
+      const over = spent > budget;
+      html += `<td style="padding:8px 12px;text-align:right;font-variant-numeric:tabular-nums;${over?'color:#B23B3B;font-weight:800;':''}">
+        ${spent > 0 ? fmtMoney(spent) : '<span style="opacity:.3;">-</span>'}
+        ${over ? ' ⚠️' : ''}
+      </td>`;
+    });
+    html += `</tr>`;
+  });
+
+  // 변동비 합계 행
+  html += `<tr style="background:rgba(0,0,0,.03);border-bottom:2px solid var(--line2);">
+    <td style="padding:10px 12px;font-weight:900;">변동비 합계</td>`;
+  months.forEach(m=>{
+    const varTotal = financeVariable.filter(x=>x.month===m).reduce((s,x)=>s+Number(x.amount),0);
+    html += `<td style="padding:10px 12px;text-align:right;font-weight:800;font-variant-numeric:tabular-nums;">${fmtMoney(varTotal)}</td>`;
+  });
+  html += `</tr>`;
+
+  // 총합계 행
+  html += `<tr style="background:rgba(28,94,87,.06);">
+    <td style="padding:12px 12px;font-weight:900;font-size:14px;color:var(--accent);">총 합계</td>`;
   months.forEach(m=>{
     const varTotal = financeVariable.filter(x=>x.month===m).reduce((s,x)=>s+Number(x.amount),0);
     const total = fixedTotal + varTotal;
-    html += `<tr style="border-bottom:1px solid var(--line);">
-      <td style="padding:10px 12px;font-weight:700;">${m.replace("-","년 ")}월</td>
-      <td style="padding:10px 12px;text-align:right;font-variant-numeric:tabular-nums;">${fmtMoney(fixedTotal)}</td>
-      <td style="padding:10px 12px;text-align:right;font-variant-numeric:tabular-nums;">${fmtMoney(varTotal)}</td>
-      <td style="padding:10px 12px;text-align:right;font-weight:900;color:#3E8E5A;font-variant-numeric:tabular-nums;">${fmtMoney(total)}</td>
-    </tr>`;
+    html += `<td style="padding:12px 12px;text-align:right;font-weight:900;font-size:14px;color:#3E8E5A;font-variant-numeric:tabular-nums;">${fmtMoney(total)}</td>`;
   });
+  html += `</tr>`;
+
   html += `</tbody></table></div>`;
   box.innerHTML = html;
 }
@@ -5733,18 +5387,8 @@ document.querySelectorAll(".finance-inner-tab").forEach(btn=>{
     document.querySelectorAll(".finance-inner-tab").forEach(b=>b.classList.remove("on"));
     document.querySelectorAll(".finance-section").forEach(s=>s.classList.remove("on"));
     btn.classList.add("on");
-    const tabId = "finance"+btn.dataset.financeTab.charAt(0).toUpperCase()+btn.dataset.financeTab.slice(1);
-    const section = document.getElementById(tabId);
-    if(section) section.classList.add("on");
-    if(btn.dataset.financeTab==="fixed"){
-      renderFixedList();
-    }
-    if(btn.dataset.financeTab==="variable"){
-      initVariableMonthSelect();
-      const m=getSelectedMonth();
-      renderBudgetBars(m);
-      renderVariableList(m);
-    }
+    document.getElementById("finance"+btn.dataset.financeTab.charAt(0).toUpperCase()+btn.dataset.financeTab.slice(1)).classList.add("on");
+    if(btn.dataset.financeTab==="variable"){ initVariableMonthSelect(); const m=getSelectedMonth(); renderBudgetBars(m); renderVariableList(m); }
     if(btn.dataset.financeTab==="summary") renderSummaryTable();
   };
 });
@@ -5773,134 +5417,6 @@ function renderFinance(){
     };
   }
 }
-
-// ── 로그인 ──────────────────────────────────────────────────
-const LOGIN_SESS_KEY  = "ljk_dash_login_v1";
-const LOGIN_ID_HASH   = "bbe9f4669c04537a5ce621d46488599b4b4e5028989e41c73b272fc851813b51"; // jklee
-const LOGIN_PW_HASH   = "ed946f65d2c785d90e827c5ffd879ce3b49c68d4c88013074176a7e73bc58bcf"; // 2580
-const REMEMBER_ID_KEY = "ljk_dash_remember_id_v1";
-const AUTO_LOGOUT_MS  = 60 * 60 * 1000; // 1시간
-const WARN_BEFORE_MS  = 5  * 60 * 1000; // 5분 전 경고
-
-function isLoggedIn(){ return sessionStorage.getItem(LOGIN_SESS_KEY) === "1"; }
-function setLoggedIn(){ sessionStorage.setItem(LOGIN_SESS_KEY, "1"); }
-
-// 저장된 아이디 불러오기
-function loadRememberedId(){
-  const saved = localStorage.getItem(REMEMBER_ID_KEY);
-  const idInput = document.getElementById("loginId");
-  const chk     = document.getElementById("rememberIdChk");
-  if(saved && idInput && chk){
-    idInput.value = saved;
-    chk.checked   = true;
-  }
-}
-
-// 로그아웃 실행
-function doLogout(){
-  sessionStorage.removeItem(LOGIN_SESS_KEY);
-  clearAutoLogoutTimers();
-  const screen = document.getElementById("loginScreen");
-  if(screen){
-    screen.style.display = "flex";
-    screen.classList.remove("hidden");
-    // 아이디 저장 체크된 경우 아이디는 유지, 비밀번호만 초기화
-    const chk = document.getElementById("rememberIdChk");
-    if(!chk?.checked) document.getElementById("loginId").value = "";
-    document.getElementById("loginPw").value = "";
-    document.getElementById("loginErr").textContent = "";
-    const focusEl = chk?.checked
-      ? document.getElementById("loginPw")
-      : document.getElementById("loginId");
-    setTimeout(()=>focusEl?.focus(), 300);
-  }
-}
-
-// 로그아웃 버튼 클릭
-function confirmLogout(){
-  if(confirm("로그아웃 하시겠습니까?")) doLogout();
-}
-
-// ── 자동 로그아웃 타이머 ──
-let autoLogoutTimer = null;
-let autoWarnTimer   = null;
-
-function clearAutoLogoutTimers(){
-  clearTimeout(autoLogoutTimer);
-  clearTimeout(autoWarnTimer);
-}
-
-function resetAutoLogout(){
-  if(!isLoggedIn()) return;
-  clearAutoLogoutTimers();
-  autoWarnTimer = setTimeout(()=>{
-    showShortcutToast("⏱ 5분 후 자동 로그아웃됩니다");
-  }, AUTO_LOGOUT_MS - WARN_BEFORE_MS);
-  autoLogoutTimer = setTimeout(()=>{
-    alert("1시간 동안 활동이 없어 자동 로그아웃되었습니다.");
-    doLogout();
-  }, AUTO_LOGOUT_MS);
-}
-
-// 활동 감지 이벤트
-["mousemove","keydown","click","scroll","touchstart"].forEach(evt=>{
-  document.addEventListener(evt, ()=>{ if(isLoggedIn()) resetAutoLogout(); }, {passive:true});
-});
-
-async function tryLogin(){
-  const id  = document.getElementById("loginId").value.trim();
-  const pw  = document.getElementById("loginPw").value;
-  const chk = document.getElementById("rememberIdChk");
-  if(!id || !pw){ showLoginErr("아이디와 비밀번호를 입력하세요."); return; }
-  const idHash = await sha256(id);
-  const pwHash = await sha256(pw);
-  if(idHash === LOGIN_ID_HASH && pwHash === LOGIN_PW_HASH){
-    // 아이디 저장 처리
-    if(chk?.checked){
-      localStorage.setItem(REMEMBER_ID_KEY, id);
-    } else {
-      localStorage.removeItem(REMEMBER_ID_KEY);
-    }
-    setLoggedIn();
-    resetAutoLogout();
-    const screen = document.getElementById("loginScreen");
-    screen.classList.add("hidden");
-    setTimeout(()=>{ screen.style.display="none"; }, 500);
-  } else {
-    showLoginErr("아이디 또는 비밀번호가 올바르지 않습니다.");
-    document.getElementById("loginPw").value = "";
-    document.getElementById("loginPw").focus();
-  }
-}
-
-function showLoginErr(msg){
-  const err = document.getElementById("loginErr");
-  err.textContent = msg;
-  err.style.animation = "none";
-  err.offsetHeight;
-  err.style.animation = "loginShake .35s ease both";
-}
-
-// 페이지 로드 시 세션 확인 + 저장된 아이디 불러오기
-window.addEventListener("DOMContentLoaded", ()=>{
-  loadRememberedId();
-  if(isLoggedIn()){
-    const screen = document.getElementById("loginScreen");
-    if(screen) screen.style.display = "none";
-    resetAutoLogout();
-  } else {
-    const chk = document.getElementById("rememberIdChk");
-    const focusEl = chk?.checked
-      ? document.getElementById("loginPw")
-      : document.getElementById("loginId");
-    setTimeout(()=>focusEl?.focus(), 300);
-  }
-});
-
-document.getElementById("loginBtn").onclick = tryLogin;
-document.getElementById("loginPw").addEventListener("keydown", e=>{ if(e.key==="Enter") tryLogin(); });
-document.getElementById("loginId").addEventListener("keydown", e=>{ if(e.key==="Enter") document.getElementById("loginPw").focus(); });
-document.getElementById("logoutBtn").onclick = confirmLogout;
 
 // 입력 중(input/textarea/select)일 때는 단축키 무시
 function isTyping(){
@@ -5988,4 +5504,208 @@ document.addEventListener("keydown", function(e){
   }
 });
 
+</script>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyA0R_n_6R6MqUpoxPom4yLfrU51duZgiQc",
+  authDomain: "jklee-dashboard.firebaseapp.com",
+  projectId: "jklee-dashboard",
+  storageBucket: "jklee-dashboard.firebasestorage.app",
+  messagingSenderId: "921721763413",
+  appId: "1:921721763413:web:f3491f8c316ce24fa1c6dc"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const DOC_REF = doc(db, "dashboard", "jklee");
+window._fsReady = true;
+
+const FS_KEYS = [
+  "ljk_dash_events_v1","ljk_dash_weektodo_v1",
+  "ljk_dash_paper_board_v1","ljk_dash_acad_countdown_v1","ljk_dash_rise_projects_v1",
+  "ljk_dash_memos_professor_v1","ljk_dash_memos_rise_v1","ljk_dash_memos_practice_committee_v1",
+  "ljk_dash_memos_student_committee_v1","ljk_dash_memos_senior_management_v1",
+  "ljk_dash_memos_accreditation_v1","ljk_dash_memos_student_counseling_v1",
+  "ljk_dash_contacts_v1","ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
+  "ljk_dash_settings_v1","ljk_dash_last_backup_at_v1",
+  "ljk_finance_fixed_v1","ljk_finance_variable_v1","ljk_finance_budget_v1",
+  "ljk_dash_student_counseling_items_v1","ljk_dash_research_items_v1",
+  "ljk_dash_achievement_items_v1","ljk_dash_career_items_v1",
+  "nursing_head_dash_faculty_timetable_v1","nursing_head_dash_faculty_index_v1",
+  "nursing_head_dash_faculty_external_events_v1","ljk_dash_manage_v1"
+];
+
+window.saveToFirestore = async function(){
+  try{
+    const payload = { updatedAt: new Date().toISOString() };
+    FS_KEYS.forEach(k=>{ const v=localStorage.getItem(k); if(v!==null) payload[k]=v; });
+    await setDoc(DOC_REF, payload, { merge:true });
+  }catch(e){ console.warn("Firestore 저장 실패:", e.message); }
+};
+
+async function loadFromFirestore(){
+  try{
+    const snap = await getDoc(DOC_REF);
+    if(snap.exists()){
+      const data = snap.data();
+      FS_KEYS.forEach(k=>{ if(data[k]!==undefined) localStorage.setItem(k, typeof data[k]==="string"?data[k]:JSON.stringify(data[k])); });
+    }
+  }catch(e){ console.warn("Firestore 로드 실패:", e.message); }
+}
+
+await loadFromFirestore();
+window._fsLoaded = true;
+window.dispatchEvent(new Event("fsLoaded"));
+</script>
+
+<script>
+// ── 자동저장 (Firestore, 디바운스 3초) ──
+let _fsSaveTimer = null;
+const _markSavedOrig = markSaved;
+markSaved = function(){
+  _markSavedOrig();
+  if(window.saveToFirestore){ clearTimeout(_fsSaveTimer); _fsSaveTimer = setTimeout(window.saveToFirestore, 3000); }
+};
+
+// ── Firestore 로드 후 재초기화 ──
+window.addEventListener("fsLoaded", ()=>{
+  loadEvents(); loadDashSettings(); applyDashSettingsToHeader();
+  try{ wtodos=JSON.parse(localStorage.getItem(WT_KEY)||"[]"); }catch(e){ wtodos=[]; }
+  loadManage();
+  try{ contactItems=JSON.parse(localStorage.getItem(CONTACT_KEY)||"[]"); }catch(e){ contactItems=[]; }
+  try{ practiceStudents=JSON.parse(localStorage.getItem(PRACTICE_STUDENT_KEY)||"[]"); }catch(e){ practiceStudents=[]; }
+  try{ counselingItems=JSON.parse(localStorage.getItem(COUNSELING_KEY)||"[]"); }catch(e){ counselingItems=[]; }
+  try{ researchItems=JSON.parse(localStorage.getItem(RESEARCH_KEY)||"[]"); }catch(e){ researchItems=[]; }
+  try{ achievementItems=JSON.parse(localStorage.getItem(ACHIEVEMENT_KEY)||"[]"); }catch(e){ achievementItems=[]; }
+  try{ careerItems=JSON.parse(localStorage.getItem(CAREER_KEY)||"[]"); }catch(e){ careerItems=[]; }
+  render(); renderWT(); loadFinanceData();
+  if(typeof renderPaper==="function") renderPaper();
+  if(typeof renderAcad==="function") renderAcad();
+  if(typeof renderRise==="function") renderRise();
+  if(typeof renderMemo==="function") renderMemo();
+  if(typeof renderContacts==="function") renderContacts();
+  if(typeof renderPracticeStudents==="function") renderPracticeStudents();
+  if(typeof renderCounselingItems==="function") renderCounselingItems();
+  if(typeof renderResearchItems==="function") renderResearchItems();
+  if(typeof renderAchievements==="function") renderAchievements();
+  if(typeof renderCareers==="function") renderCareers();
+  updateSidebarSummary();
+});
+
+// ── 로그인 ──
+const LOGIN_SESS_KEY  = "ljk_dash_login_v1";
+const LOGIN_ID_HASH   = "bbe9f4669c04537a5ce621d46488599b4b4e5028989e41c73b272fc851813b51";
+const LOGIN_PW_HASH   = "ed946f65d2c785d90e827c5ffd879ce3b49c68d4c88013074176a7e73bc58bcf";
+const REMEMBER_ID_KEY = "ljk_dash_remember_id_v1";
+const AUTO_LOGOUT_MS  = 60 * 60 * 1000;
+const WARN_BEFORE_MS  = 5  * 60 * 1000;
+let autoLogoutTimer = null, autoWarnTimer = null;
+
+function isLoggedIn(){ return sessionStorage.getItem(LOGIN_SESS_KEY)==="1"; }
+function setLoggedIn(){ sessionStorage.setItem(LOGIN_SESS_KEY,"1"); }
+
+function doLogout(){
+  sessionStorage.removeItem(LOGIN_SESS_KEY);
+  clearTimeout(autoLogoutTimer); clearTimeout(autoWarnTimer);
+  const screen = document.getElementById("loginScreen");
+  if(screen){ screen.style.display="flex"; screen.classList.remove("hidden"); }
+  const chk = document.getElementById("rememberIdChk");
+  if(!chk?.checked) document.getElementById("loginId").value="";
+  document.getElementById("loginPw").value="";
+  document.getElementById("loginErr").textContent="";
+  setTimeout(()=>{ (chk?.checked ? document.getElementById("loginPw") : document.getElementById("loginId"))?.focus(); },300);
+}
+
+function confirmLogout(){ if(confirm("로그아웃 하시겠습니까?")) doLogout(); }
+
+function resetAutoLogout(){
+  if(!isLoggedIn()) return;
+  clearTimeout(autoLogoutTimer); clearTimeout(autoWarnTimer);
+  autoWarnTimer   = setTimeout(()=>{ if(typeof showShortcutToast==="function") showShortcutToast("⏱ 5분 후 자동 로그아웃됩니다"); }, AUTO_LOGOUT_MS - WARN_BEFORE_MS);
+  autoLogoutTimer = setTimeout(()=>{ alert("1시간 동안 활동이 없어 자동 로그아웃되었습니다."); doLogout(); }, AUTO_LOGOUT_MS);
+}
+["mousemove","keydown","click","scroll","touchstart"].forEach(evt=>{
+  document.addEventListener(evt,()=>{ if(isLoggedIn()) resetAutoLogout(); },{passive:true});
+});
+
+async function sha256(str){ const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join(""); }
+
+async function tryLogin(){
+  const id=document.getElementById("loginId").value.trim();
+  const pw=document.getElementById("loginPw").value;
+  const chk=document.getElementById("rememberIdChk");
+  const err=document.getElementById("loginErr");
+  if(!id||!pw){ err.textContent="아이디와 비밀번호를 입력하세요."; return; }
+  const idHash=await sha256(id), pwHash=await sha256(pw);
+  if(idHash===LOGIN_ID_HASH && pwHash===LOGIN_PW_HASH){
+    chk?.checked ? localStorage.setItem(REMEMBER_ID_KEY,id) : localStorage.removeItem(REMEMBER_ID_KEY);
+    setLoggedIn(); resetAutoLogout();
+    const screen=document.getElementById("loginScreen");
+    screen.classList.add("hidden");
+    setTimeout(()=>{ screen.style.display="none"; },500);
+  } else {
+    err.textContent="아이디 또는 비밀번호가 올바르지 않습니다.";
+    err.style.animation="none"; err.offsetHeight; err.style.animation="loginShake .35s ease both";
+    document.getElementById("loginPw").value="";
+    document.getElementById("loginPw").focus();
+  }
+}
+
+window.addEventListener("DOMContentLoaded",()=>{
+  const saved=localStorage.getItem(REMEMBER_ID_KEY);
+  if(saved){ document.getElementById("loginId").value=saved; document.getElementById("rememberIdChk").checked=true; }
+  if(isLoggedIn()){
+    document.getElementById("loginScreen").style.display="none";
+    resetAutoLogout();
+  } else {
+    setTimeout(()=>{ (document.getElementById("rememberIdChk")?.checked ? document.getElementById("loginPw") : document.getElementById("loginId"))?.focus(); },300);
+  }
+});
+
+document.getElementById("loginBtn").onclick = tryLogin;
+document.getElementById("loginPw").addEventListener("keydown",e=>{ if(e.key==="Enter") tryLogin(); });
+document.getElementById("loginId").addEventListener("keydown",e=>{ if(e.key==="Enter") document.getElementById("loginPw").focus(); });
+document.getElementById("logoutBtn").onclick = confirmLogout;
+
+// ── 모바일 네비바 ──
+function updateMobNav(view){
+  ["dashboard","schedule","finance"].forEach(v=>{
+    const btn=document.getElementById("mobNav"+v.charAt(0).toUpperCase()+v.slice(1));
+    if(btn) btn.classList.toggle("on",v===view);
+  });
+}
+
+// ── 사이드바 금융관리 탭: 항상 renderFinance 호출 ──
+const _finTabBtn = document.getElementById("financeTabBtn");
+if(_finTabBtn){
+  _finTabBtn.addEventListener("click",function(e){
+    e.stopImmediatePropagation();
+    if(isFinanceUnlocked()){ setActiveView("finance"); renderFinance(); }
+    else openFinanceLock();
+  },true);
+}
+
+// ── 단축키 ──
+function isTyping(){ const t=document.activeElement?.tagName?.toLowerCase(); return t==="input"||t==="textarea"||t==="select"; }
+function showShortcutToast(msg){
+  let t=document.getElementById("kbToast");
+  if(!t){ t=document.createElement("div"); t.id="kbToast"; t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(28,94,87,.92);color:#fff;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;"; document.body.appendChild(t); }
+  t.textContent=msg; t.style.opacity="1"; clearTimeout(t._t); t._t=setTimeout(()=>{ t.style.opacity="0"; },1400);
+}
+document.addEventListener("keydown",function(e){
+  if(e.altKey&&!e.ctrlKey&&!e.shiftKey&&!isTyping()){
+    if(e.key==="n"||e.key==="N"){ e.preventDefault(); setActiveView("dashboard"); openAdd(sel); showShortcutToast("⌨️ Alt+N · 일정 추가"); return; }
+    if(e.key==="s"||e.key==="S"){ e.preventDefault(); setActiveView("schedule"); showShortcutToast("⌨️ Alt+S · 일정"); return; }
+    if(e.key==="c"||e.key==="C"){ e.preventDefault(); setActiveView("tasks"); showShortcutToast("⌨️ Alt+C · 체크리스트"); return; }
+  }
+  if(e.key==="Escape"&&!e.altKey&&!e.ctrlKey){
+    const m=document.getElementById("modalBg"); if(m?.classList.contains("open")){ closeModal(); return; }
+  }
+  if(e.ctrlKey&&e.key==="Enter"&&!e.altKey){
+    const m=document.getElementById("modalBg"); if(m?.classList.contains("open")){ saveModal(); showShortcutToast("⌨️ Ctrl+Enter · 저장"); return; }
+  }
+});
 </script>
