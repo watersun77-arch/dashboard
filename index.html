@@ -2025,14 +2025,16 @@ async function loadFromFirestore(){
     if(snap.exists()){
       const data = snap.data();
       const keys = [
-        "ljk_dash_events_v1","ljk_dash_wtodos_v1","ljk_dash_paper_v1",
-        "ljk_dash_rise_v1","ljk_dash_memo_v1","ljk_dash_contacts_v1",
+        "ljk_dash_events_v1","ljk_dash_weektodo_v1",
+        "ljk_dash_paper_board_v1","ljk_dash_acad_countdown_v1","ljk_dash_rise_projects_v1",
+        "ljk_dash_memo_v1","ljk_dash_contacts_v1",
         "ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
         "ljk_dash_settings_v1","ljk_dash_last_backup_at_v1",
         "ljk_finance_fixed_v1","ljk_finance_variable_v1","ljk_finance_budget_v1",
-        "ljk_dash_counseling_v1","ljk_dash_research_v1",
-        "ljk_dash_achievement_v1","ljk_dash_career_v1",
-        "ljk_dash_faculty_timetable_v1","ljk_dash_manage_v1"
+        "ljk_dash_student_counseling_items_v1","ljk_dash_research_items_v1",
+        "ljk_dash_achievement_items_v1","ljk_dash_career_items_v1",
+        "nursing_head_dash_faculty_timetable_v1","nursing_head_dash_faculty_index_v1",
+        "nursing_head_dash_faculty_external_events_v1","ljk_dash_manage_v1"
       ];
       let updated = false;
       keys.forEach(k=>{
@@ -2055,14 +2057,16 @@ window.saveToFirestore = async function(){
   if(!window._fsReady) return;
   try{
     const keys = [
-      "ljk_dash_events_v1","ljk_dash_wtodos_v1","ljk_dash_paper_v1",
-      "ljk_dash_rise_v1","ljk_dash_memo_v1","ljk_dash_contacts_v1",
+      "ljk_dash_events_v1","ljk_dash_weektodo_v1",
+      "ljk_dash_paper_board_v1","ljk_dash_acad_countdown_v1","ljk_dash_rise_projects_v1",
+      "ljk_dash_memo_v1","ljk_dash_contacts_v1",
       "ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
       "ljk_dash_settings_v1","ljk_dash_last_backup_at_v1",
       "ljk_finance_fixed_v1","ljk_finance_variable_v1","ljk_finance_budget_v1",
-      "ljk_dash_counseling_v1","ljk_dash_research_v1",
-      "ljk_dash_achievement_v1","ljk_dash_career_v1",
-      "ljk_dash_faculty_timetable_v1","ljk_dash_manage_v1"
+      "ljk_dash_student_counseling_items_v1","ljk_dash_research_items_v1",
+      "ljk_dash_achievement_items_v1","ljk_dash_career_items_v1",
+      "nursing_head_dash_faculty_timetable_v1","nursing_head_dash_faculty_index_v1",
+      "nursing_head_dash_faculty_external_events_v1","ljk_dash_manage_v1"
     ];
     const payload = { updatedAt: new Date().toISOString() };
     keys.forEach(k=>{
@@ -4752,6 +4756,45 @@ render = function(){ _renderOriginal(); updateSidebarSummary(); updateViewTitle(
 
 render();
 initSidebarView();
+
+// Firestore 로드 완료 시 전체 데이터 재초기화
+function reInitAfterFirestore(){
+  loadEvents();
+  loadDashSettings();
+  applyDashSettingsToHeader();
+
+  try{ const r=localStorage.getItem(WT_KEY); wtodos=r?JSON.parse(r):[]; if(!Array.isArray(wtodos)) wtodos=[]; }catch(e){ wtodos=[]; }
+  try{ const r=localStorage.getItem(PAPER_KEY); paperItems=r?JSON.parse(r):[]; if(!Array.isArray(paperItems)) paperItems=[]; }catch(e){ paperItems=[]; }
+  try{ const r=localStorage.getItem(ACAD_KEY); acadItems=r?JSON.parse(r):[]; if(!Array.isArray(acadItems)) acadItems=[]; }catch(e){ acadItems=[]; }
+  try{ const r=localStorage.getItem(RISE_KEY); riseItems=r?JSON.parse(r):[]; if(!Array.isArray(riseItems)) riseItems=[]; }catch(e){ riseItems=[]; }
+  try{ const r=localStorage.getItem(CONTACT_KEY); contactItems=r?JSON.parse(r):[]; if(!Array.isArray(contactItems)) contactItems=[]; }catch(e){ contactItems=[]; }
+  try{ const r=localStorage.getItem(PRACTICE_STUDENT_KEY); practiceStudents=r?JSON.parse(r):[]; if(!Array.isArray(practiceStudents)) practiceStudents=[]; }catch(e){ practiceStudents=[]; }
+  try{ const r=localStorage.getItem(WRITE_DB_KEY); writeDbLogs=r?JSON.parse(r):[]; if(!Array.isArray(writeDbLogs)) writeDbLogs=[]; }catch(e){ writeDbLogs=[]; }
+  try{ const r=localStorage.getItem(COUNSELING_KEY); counselingItems=r?JSON.parse(r):[]; if(!Array.isArray(counselingItems)) counselingItems=[]; }catch(e){ counselingItems=[]; }
+  try{ const r=localStorage.getItem(RESEARCH_KEY); researchItems=r?JSON.parse(r):[]; if(!Array.isArray(researchItems)) researchItems=[]; }catch(e){ researchItems=[]; }
+  try{ const r=localStorage.getItem(ACHIEVEMENT_KEY); achievementItems=r?JSON.parse(r):[]; if(!Array.isArray(achievementItems)) achievementItems=[]; }catch(e){ achievementItems=[]; }
+  try{ const r=localStorage.getItem(CAREER_KEY); careerItems=r?JSON.parse(r):[]; if(!Array.isArray(careerItems)) careerItems=[]; }catch(e){ careerItems=[]; }
+
+  render();
+  renderWT();
+  if(typeof renderPapers==="function") renderPapers();
+  if(typeof renderAcads==="function") renderAcads();
+  if(typeof renderRises==="function") renderRises();
+  if(typeof renderMemo==="function") renderMemo();
+  if(typeof renderContacts==="function") renderContacts();
+  if(typeof renderPracticeStudents==="function") renderPracticeStudents();
+  if(typeof renderCounselingItems==="function") renderCounselingItems();
+  if(typeof renderResearchItems==="function") renderResearchItems();
+  if(typeof renderAchievements==="function") renderAchievements();
+  if(typeof renderCareers==="function") renderCareers();
+  renderAutoSaveStatus();
+  updateSidebarSummary();
+  console.log("🔄 Firestore 데이터로 화면 재초기화 완료");
+}
+
+window.addEventListener("fsLoaded", ()=>{
+  reInitAfterFirestore();
+});
 
 function parseAIAnswerToObject(answer){
   if(!answer) return null;
