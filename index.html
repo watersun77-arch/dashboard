@@ -992,6 +992,116 @@
     .mobile-menu{padding:10px 13px;font-size:13px;}
   }
 
+  /* ── 모바일 전용 최적화 (480px 이하) ── */
+  @media(max-width:480px){
+
+    /* 헤더 컨트롤 간소화 */
+    .nav{ flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+    .nav .who{ font-size:11px; width:100%; }
+    .ctrls{ flex-wrap:wrap; gap:4px; }
+    .ctrls .backup-btn,
+    .ctrls .restore-btn,
+    .ctrls .settings-btn,
+    .ctrls .logout-btn,
+    .ctrls .exit-btn,
+    .ctrls .save-status,
+    #storageIndicator{ display:none !important; }
+    .ctrls button{ padding:7px 10px; font-size:12px; }
+    #prevWeek, #nextWeek{ display:none; }
+
+    /* 경고 배너 */
+    #storageWarningBanner{ font-size:12px; padding:8px 12px; }
+
+    /* 대시보드 히어로 */
+    .hero{ padding:14px 16px; border-radius:14px; }
+    .date-main{ font-size:clamp(28px,8vw,40px); }
+    .date-sub{ font-size:12px; }
+    .week-tag{ font-size:11px; }
+
+    /* 탭 버튼 */
+    .tabs{ gap:5px; }
+    .tab{ padding:6px 11px; font-size:12px; }
+
+    /* 카드 */
+    .card{ padding:13px 13px 14px; border-radius:13px; }
+    .card h2{ font-size:16px; }
+
+    /* 대시보드 그리드 → 1열 */
+    .grid{ grid-template-columns:1fr !important; gap:10px; }
+
+    /* 일정 아이템 */
+    .item{ gap:8px; padding:10px 0; }
+    .time{ flex-basis:44px; font-size:12.5px; }
+    .body .t{ font-size:14px; }
+    .body .meta{ font-size:11px; }
+    .ev-acts button{ font-size:12px; padding:4px 5px; }
+
+    /* 주간 스트립 */
+    .weekstrip{ gap:3px; }
+    .ws{ padding:5px 2px; min-height:46px; border-radius:9px; }
+    .ws .dn{ font-size:9.5px; }
+    .ws .dd{ font-size:14px; }
+
+    /* 주간 뷰 → 세로 1열 */
+    .weekdays{ grid-template-columns:1fr !important; gap:6px; }
+    .wday{ min-height:auto !important; padding:10px; border-radius:12px; }
+    .wday-date{ font-size:17px; }
+    .wday-name{ font-size:12px; }
+
+    /* 일정 모달 */
+    .modal{ padding:18px 14px; border-radius:18px; max-height:92vh; }
+    .modal h3{ font-size:17px; margin-bottom:12px; }
+    .field label{ font-size:11.5px; }
+    .field input,.field select,.field textarea{ font-size:14px; padding:9px 11px; }
+    .field.row2{ grid-template-columns:1fr !important; gap:8px; }
+    .modal-acts{ gap:8px; }
+    .modal-acts button{ padding:11px; font-size:13px; }
+
+    /* 일정 추가 버튼 */
+    .add-ev{ font-size:12px; padding:7px 12px; }
+
+    /* 중요 일정 D-day */
+    .dday{ min-width:42px; font-size:11.5px; padding:5px 6px; }
+    .urg .info .t{ font-size:13px; }
+    .urg .info .d{ font-size:11px; }
+
+    /* 하단 여백 (모바일 네비바 공간) */
+    .main-panel{ padding-bottom:72px !important; }
+
+    /* 로그인 화면 */
+    .login-box{ padding:32px 22px 28px; border-radius:20px; }
+    .login-title{ font-size:22px; }
+    .login-field input{ font-size:14px; padding:12px 14px; }
+    .login-btn{ font-size:14px; padding:13px; }
+  }
+
+  /* ── 모바일 하단 네비게이션 바 ── */
+  #mobileNavBar{
+    display:none;
+    position:fixed;
+    bottom:0;left:0;right:0;
+    background:#fff;
+    border-top:1px solid var(--line);
+    box-shadow:0 -4px 16px rgba(42,38,34,.08);
+    z-index:50;
+    padding:0;
+    height:60px;
+  }
+  @media(max-width:480px){
+    #mobileNavBar{ display:flex; }
+    .mobile-menu{ display:none !important; }
+  }
+  .mob-nav-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;border:none;background:none;cursor:pointer;
+    font-family:'Pretendard',sans-serif;color:var(--ink-soft);
+    font-size:10px;font-weight:700;padding:6px 0;transition:.15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .mob-nav-btn .mob-ico{ font-size:20px;line-height:1; }
+  .mob-nav-btn.on{ color:var(--accent); }
+  .mob-nav-btn.on .mob-ico{ transform:scale(1.1); }
+
 
   /* ── 세로 모니터용: 일정 탭 날짜 칸 확장 ──
      일정 탭에서 주간/월간 날짜 칸을 길게 확보하고,
@@ -1161,6 +1271,10 @@
       <label>비밀번호</label>
       <input type="password" id="loginPw" placeholder="비밀번호 입력" autocomplete="current-password">
     </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <input type="checkbox" id="rememberIdChk" style="width:16px;height:16px;accent-color:rgba(255,255,255,.8);cursor:pointer;flex:0 0 auto;">
+      <label for="rememberIdChk" style="font-size:13px;color:rgba(255,255,255,.55);cursor:pointer;user-select:none;">아이디 저장</label>
+    </div>
     <div class="login-err" id="loginErr"></div>
     <button class="login-btn" id="loginBtn">로그인</button>
     <div class="login-footer">
@@ -1171,6 +1285,30 @@
 </div>
 
 <button class="mobile-menu" id="mobileMenuBtn">☰ 메뉴</button>
+
+<!-- 모바일 하단 네비게이션 바 -->
+<div id="mobileNavBar">
+  <button class="mob-nav-btn on" id="mobNavDashboard" onclick="setActiveView('dashboard');updateMobNav('dashboard')">
+    <span class="mob-ico">🏠</span>
+    <span>대시보드</span>
+  </button>
+  <button class="mob-nav-btn" id="mobNavSchedule" onclick="setActiveView('schedule');updateMobNav('schedule')">
+    <span class="mob-ico">📅</span>
+    <span>일정</span>
+  </button>
+  <button class="mob-nav-btn" id="mobNavAdd" onclick="setActiveView('dashboard');openAdd(sel)">
+    <span class="mob-ico" style="font-size:28px;color:var(--accent);">＋</span>
+    <span>일정 추가</span>
+  </button>
+  <button class="mob-nav-btn" id="mobNavTasks" onclick="setActiveView('tasks');updateMobNav('tasks')">
+    <span class="mob-ico">📌</span>
+    <span>할일</span>
+  </button>
+  <button class="mob-nav-btn" id="mobNavMenu" onclick="document.body.classList.toggle('side-open')">
+    <span class="mob-ico">☰</span>
+    <span>메뉴</span>
+  </button>
+</div>
 <div class="app-shell">
   <aside class="side" id="sideNav">
     <div class="side-brand">
@@ -2027,8 +2165,10 @@ async function loadFromFirestore(){
       const keys = [
         "ljk_dash_events_v1","ljk_dash_weektodo_v1",
         "ljk_dash_paper_board_v1","ljk_dash_acad_countdown_v1","ljk_dash_rise_projects_v1",
-        "ljk_dash_memo_v1","ljk_dash_contacts_v1",
-        "ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
+        "ljk_dash_memos_professor_v1","ljk_dash_memos_rise_v1","ljk_dash_memos_practice_committee_v1",
+        "ljk_dash_memos_student_committee_v1","ljk_dash_memos_senior_management_v1",
+        "ljk_dash_memos_accreditation_v1","ljk_dash_memos_student_counseling_v1",
+        "ljk_dash_contacts_v1","ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
         "ljk_dash_settings_v1","ljk_dash_last_backup_at_v1",
         "ljk_finance_fixed_v1","ljk_finance_variable_v1","ljk_finance_budget_v1",
         "ljk_dash_student_counseling_items_v1","ljk_dash_research_items_v1",
@@ -2059,8 +2199,10 @@ window.saveToFirestore = async function(){
     const keys = [
       "ljk_dash_events_v1","ljk_dash_weektodo_v1",
       "ljk_dash_paper_board_v1","ljk_dash_acad_countdown_v1","ljk_dash_rise_projects_v1",
-      "ljk_dash_memo_v1","ljk_dash_contacts_v1",
-      "ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
+      "ljk_dash_memos_professor_v1","ljk_dash_memos_rise_v1","ljk_dash_memos_practice_committee_v1",
+      "ljk_dash_memos_student_committee_v1","ljk_dash_memos_senior_management_v1",
+      "ljk_dash_memos_accreditation_v1","ljk_dash_memos_student_counseling_v1",
+      "ljk_dash_contacts_v1","ljk_dash_practice_students_v1","ljk_dash_write_db_logs_v1",
       "ljk_dash_settings_v1","ljk_dash_last_backup_at_v1",
       "ljk_finance_fixed_v1","ljk_finance_variable_v1","ljk_finance_budget_v1",
       "ljk_dash_student_counseling_items_v1","ljk_dash_research_items_v1",
@@ -4777,6 +4919,11 @@ function reInitAfterFirestore(){
 
   render();
   renderWT();
+  loadManage();
+  if(typeof renderPaper==="function") renderPaper();
+  if(typeof renderAcad==="function") renderAcad();
+  if(typeof renderRise==="function") renderRise();
+  if(typeof renderWriteDbLogs==="function") renderWriteDbLogs();
   if(typeof renderPapers==="function") renderPapers();
   if(typeof renderAcads==="function") renderAcads();
   if(typeof renderRises==="function") renderRises();
@@ -4791,6 +4938,20 @@ function reInitAfterFirestore(){
   updateSidebarSummary();
   console.log("🔄 Firestore 데이터로 화면 재초기화 완료");
 }
+
+function updateMobNav(view){
+  ["dashboard","schedule","tasks"].forEach(v=>{
+    const btn = document.getElementById("mobNav"+v.charAt(0).toUpperCase()+v.slice(1));
+    if(btn) btn.classList.toggle("on", v===view);
+  });
+}
+
+// setActiveView 후 모바일 네비바도 업데이트
+const _setActiveViewOrig = setActiveView;
+setActiveView = function(view){
+  _setActiveViewOrig(view);
+  updateMobNav(view);
+};
 
 window.addEventListener("fsLoaded", ()=>{
   reInitAfterFirestore();
@@ -5134,7 +5295,7 @@ setTimeout(()=>{
 // ── 금융관리 비밀번호 ──────────────────────────────────────
 const FINANCE_PW_KEY  = "ljk_finance_pw_hash_v1";
 const FINANCE_SESS_KEY = "ljk_finance_unlocked_v1";
-const FINANCE_DEFAULT_HASH = "ed946f65d2c785d90e827c5ffd879ce3b49c68d4c88013074176a7e73bc58bcf"; // SHA-256("2580")
+const FINANCE_DEFAULT_HASH = "fe2592b42a727e977f055947385b709cc82b16b9a87f88c6abf3900d65d0cdc3"; // SHA-256("4321")
 
 async function sha256(str){
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
@@ -5562,14 +5723,26 @@ function renderFinance(){
 }
 
 // ── 로그인 ──────────────────────────────────────────────────
-const LOGIN_SESS_KEY = "ljk_dash_login_v1";
-const LOGIN_ID_HASH  = "bbe9f4669c04537a5ce621d46488599b4b4e5028989e41c73b272fc851813b51"; // jklee
-const LOGIN_PW_HASH  = "ed946f65d2c785d90e827c5ffd879ce3b49c68d4c88013074176a7e73bc58bcf"; // 2580
-const AUTO_LOGOUT_MS = 60 * 60 * 1000; // 1시간
-const WARN_BEFORE_MS = 5  * 60 * 1000; // 5분 전 경고
+const LOGIN_SESS_KEY  = "ljk_dash_login_v1";
+const LOGIN_ID_HASH   = "bbe9f4669c04537a5ce621d46488599b4b4e5028989e41c73b272fc851813b51"; // jklee
+const LOGIN_PW_HASH   = "ed946f65d2c785d90e827c5ffd879ce3b49c68d4c88013074176a7e73bc58bcf"; // 2580
+const REMEMBER_ID_KEY = "ljk_dash_remember_id_v1";
+const AUTO_LOGOUT_MS  = 60 * 60 * 1000; // 1시간
+const WARN_BEFORE_MS  = 5  * 60 * 1000; // 5분 전 경고
 
 function isLoggedIn(){ return sessionStorage.getItem(LOGIN_SESS_KEY) === "1"; }
 function setLoggedIn(){ sessionStorage.setItem(LOGIN_SESS_KEY, "1"); }
+
+// 저장된 아이디 불러오기
+function loadRememberedId(){
+  const saved = localStorage.getItem(REMEMBER_ID_KEY);
+  const idInput = document.getElementById("loginId");
+  const chk     = document.getElementById("rememberIdChk");
+  if(saved && idInput && chk){
+    idInput.value = saved;
+    chk.checked   = true;
+  }
+}
 
 // 로그아웃 실행
 function doLogout(){
@@ -5579,10 +5752,15 @@ function doLogout(){
   if(screen){
     screen.style.display = "flex";
     screen.classList.remove("hidden");
-    document.getElementById("loginId").value = "";
+    // 아이디 저장 체크된 경우 아이디는 유지, 비밀번호만 초기화
+    const chk = document.getElementById("rememberIdChk");
+    if(!chk?.checked) document.getElementById("loginId").value = "";
     document.getElementById("loginPw").value = "";
     document.getElementById("loginErr").textContent = "";
-    setTimeout(()=>document.getElementById("loginId").focus(), 300);
+    const focusEl = chk?.checked
+      ? document.getElementById("loginPw")
+      : document.getElementById("loginId");
+    setTimeout(()=>focusEl?.focus(), 300);
   }
 }
 
@@ -5603,11 +5781,9 @@ function clearAutoLogoutTimers(){
 function resetAutoLogout(){
   if(!isLoggedIn()) return;
   clearAutoLogoutTimers();
-  // 5분 전 경고
   autoWarnTimer = setTimeout(()=>{
     showShortcutToast("⏱ 5분 후 자동 로그아웃됩니다");
   }, AUTO_LOGOUT_MS - WARN_BEFORE_MS);
-  // 자동 로그아웃
   autoLogoutTimer = setTimeout(()=>{
     alert("1시간 동안 활동이 없어 자동 로그아웃되었습니다.");
     doLogout();
@@ -5622,10 +5798,17 @@ function resetAutoLogout(){
 async function tryLogin(){
   const id  = document.getElementById("loginId").value.trim();
   const pw  = document.getElementById("loginPw").value;
+  const chk = document.getElementById("rememberIdChk");
   if(!id || !pw){ showLoginErr("아이디와 비밀번호를 입력하세요."); return; }
   const idHash = await sha256(id);
   const pwHash = await sha256(pw);
   if(idHash === LOGIN_ID_HASH && pwHash === LOGIN_PW_HASH){
+    // 아이디 저장 처리
+    if(chk?.checked){
+      localStorage.setItem(REMEMBER_ID_KEY, id);
+    } else {
+      localStorage.removeItem(REMEMBER_ID_KEY);
+    }
     setLoggedIn();
     resetAutoLogout();
     const screen = document.getElementById("loginScreen");
@@ -5646,14 +5829,19 @@ function showLoginErr(msg){
   err.style.animation = "loginShake .35s ease both";
 }
 
-// 페이지 로드 시 세션 확인
+// 페이지 로드 시 세션 확인 + 저장된 아이디 불러오기
 window.addEventListener("DOMContentLoaded", ()=>{
+  loadRememberedId();
   if(isLoggedIn()){
     const screen = document.getElementById("loginScreen");
     if(screen) screen.style.display = "none";
     resetAutoLogout();
   } else {
-    setTimeout(()=>{ document.getElementById("loginId")?.focus(); }, 300);
+    const chk = document.getElementById("rememberIdChk");
+    const focusEl = chk?.checked
+      ? document.getElementById("loginPw")
+      : document.getElementById("loginId");
+    setTimeout(()=>focusEl?.focus(), 300);
   }
 });
 
