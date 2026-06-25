@@ -1141,6 +1141,7 @@
       <button id="sideAddSchedule">＋ <span>오늘 일정 추가</span></button>
       <button id="sideBackup">💾 <span>백업 저장</span></button>
       <button id="sideSettings">⚙ <span>학기·방학 설정</span></button>
+      <button id="sideKakao">💬 <span>카카오 알림</span></button>
     </div>
 
     <!-- 키보드 단축키 안내 -->
@@ -3713,6 +3714,7 @@ function checkAlarms(){
       saveAlarmFired(fired);
       showBrowserAlarm(e, before);
       showDashboardAlarm(e, before);
+      if(typeof kakaoOnAlarm==="function") kakaoOnAlarm(e, before);
     }
   });
 }
@@ -5707,5 +5709,206 @@ document.addEventListener("keydown",function(e){
   if(e.ctrlKey&&e.key==="Enter"&&!e.altKey){
     const m=document.getElementById("modalBg"); if(m?.classList.contains("open")){ saveModal(); showShortcutToast("⌨️ Ctrl+Enter · 저장"); return; }
   }
+});
+</script>
+<!-- ══════════════════════ 카카오톡 알림 연동 (A안: 대시보드 열려있을 때 나에게 보내기) ══════════════════════ -->
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"
+        crossorigin="anonymous" onerror="window._kakaoSdkFailed=true;"></script>
+<style>
+#kakaoBg{position:fixed;inset:0;z-index:10050;background:rgba(15,41,34,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;font-family:'Pretendard',sans-serif;}
+#kakaoBg.open{display:flex;}
+.kakao-card{background:var(--paper,#F6F1E7);color:#2a2a26;width:100%;max-width:430px;border-radius:22px;padding:26px 26px 22px;box-shadow:0 24px 70px rgba(0,0,0,.35);animation:loginRise .35s cubic-bezier(.22,1,.36,1) both;max-height:88vh;overflow-y:auto;}
+.kakao-card h3{font-family:'Nanum Myeongjo',serif;font-size:21px;font-weight:800;margin:0 0 4px;color:var(--accent,#1C5E57);}
+.kakao-card .ksub{font-size:12.5px;color:#6b6b63;margin-bottom:18px;line-height:1.5;}
+.kakao-status{display:flex;align-items:center;gap:9px;padding:12px 14px;border-radius:13px;background:rgba(0,0,0,.05);font-size:13.5px;font-weight:700;margin-bottom:16px;}
+.kakao-status .dot{width:9px;height:9px;border-radius:50%;background:#c0392b;flex:none;}
+.kakao-status.on .dot{background:#27ae60;}
+.kakao-row{margin-bottom:14px;}
+.kakao-row label{display:block;font-size:11.5px;font-weight:800;color:#6b6b63;letter-spacing:.04em;margin-bottom:6px;}
+.kakao-row input[type=time]{font-family:inherit;font-size:15px;padding:9px 12px;border:1px solid rgba(0,0,0,.16);border-radius:11px;background:#fff;width:140px;}
+.kakao-toggle{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:12px;background:rgba(0,0,0,.04);margin-bottom:10px;}
+.kakao-toggle span{font-size:13.5px;font-weight:700;}
+.kakao-sw{position:relative;width:46px;height:26px;border-radius:14px;background:#bbb;cursor:pointer;transition:.2s;flex:none;}
+.kakao-sw.on{background:var(--accent,#1C5E57);}
+.kakao-sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;}
+.kakao-sw.on::after{left:23px;}
+.kakao-btns{display:flex;gap:9px;margin-top:8px;}
+.kakao-btns button{flex:1;font-family:inherit;font-size:13.5px;font-weight:800;border:none;border-radius:12px;padding:12px;cursor:pointer;}
+.kbtn-primary{background:#FEE500;color:#3c1e1e;}
+.kbtn-ghost{background:rgba(0,0,0,.08);color:#3c3c36;}
+.kbtn-test{background:var(--accent,#1C5E57);color:#fff;}
+.kakao-help{font-size:11px;color:#8a8a80;line-height:1.6;margin-top:14px;padding-top:12px;border-top:1px solid rgba(0,0,0,.08);}
+.kakao-help b{color:#6b6b63;}
+.kakao-close{position:absolute;}
+</style>
+
+<div id="kakaoBg">
+  <div class="kakao-card">
+    <h3>💬 카카오톡 알림 연동</h3>
+    <div class="ksub">대시보드가 열려 있을 때, 아침 일정 브리핑과 임박 알림을 교수님 카카오톡(나에게 보내기)으로 전송합니다.</div>
+    <div class="kakao-status" id="kakaoStatus"><span class="dot"></span><span id="kakaoStatusText">연결 안 됨</span></div>
+
+    <div class="kakao-toggle">
+      <span>📋 아침 일정 브리핑</span>
+      <div class="kakao-sw" id="kakaoSwBriefing" data-k="briefing"></div>
+    </div>
+    <div class="kakao-row" id="kakaoBriefRow">
+      <label>브리핑 전송 시각</label>
+      <input type="time" id="kakaoBriefTime" value="08:00">
+    </div>
+    <div class="kakao-toggle">
+      <span>🔔 임박 일정 알림 (30분 전 등)</span>
+      <div class="kakao-sw" id="kakaoSwAlarm" data-k="alarm"></div>
+    </div>
+
+    <div class="kakao-btns">
+      <button class="kbtn-primary" id="kakaoConnectBtn">카카오 연결</button>
+      <button class="kbtn-test" id="kakaoTestBtn">테스트 전송</button>
+    </div>
+    <div class="kakao-btns">
+      <button class="kbtn-ghost" id="kakaoCloseBtn">닫기</button>
+    </div>
+
+    <div class="kakao-help">
+      <b>※ 사전 준비</b> — 카카오 개발자 앱의 JavaScript 키를 아래 코드 상단 <b>KAKAO_JS_KEY</b>에 넣고, 플랫폼 Web 사이트 도메인에 GitHub Pages 주소를 등록해야 작동합니다. 토큰은 브라우저 세션에 저장되어, 브라우저를 완전히 종료하면 다시 연결이 필요할 수 있습니다.
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── 카카오 연동 설정 ──────────────────────────────── */
+const KAKAO_JS_KEY = "0a32c33d5c2e842851bdbfe4017b5c68";   // ← 카카오 개발자센터 > 플랫폼 키 > JavaScript 키
+const KAKAO_CFG_KEY = "ljk_dash_kakao_v1";
+
+function kakaoLoadCfg(){
+  try{ return Object.assign({briefing:true, alarm:true, briefTime:"08:00", lastBriefDate:""}, JSON.parse(localStorage.getItem(KAKAO_CFG_KEY)||"{}")); }
+  catch(e){ return {briefing:true, alarm:true, briefTime:"08:00", lastBriefDate:""}; }
+}
+function kakaoSaveCfg(c){ try{ localStorage.setItem(KAKAO_CFG_KEY, JSON.stringify(c)); }catch(e){} }
+let kakaoCfg = kakaoLoadCfg();
+
+function kakaoReady(){ return (typeof Kakao!=="undefined") && Kakao && Kakao.isInitialized && Kakao.isInitialized(); }
+function kakaoConnected(){ return kakaoReady() && Kakao.Auth && !!Kakao.Auth.getAccessToken(); }
+
+function kakaoInit(){
+  if(window._kakaoSdkFailed){ console.warn("카카오 SDK 로드 실패"); return; }
+  if(typeof Kakao==="undefined") return;
+  if(!Kakao.isInitialized()){
+    if(KAKAO_JS_KEY && KAKAO_JS_KEY.indexOf("여기에")<0){ try{ Kakao.init(KAKAO_JS_KEY); }catch(e){ console.warn("Kakao.init 실패:", e.message); } }
+  }
+}
+
+function kakaoLogin(){
+  kakaoInit();
+  if(!kakaoReady()){ alert("카카오 SDK가 초기화되지 않았습니다.\n코드 상단 KAKAO_JS_KEY에 JavaScript 키를 입력했는지 확인하세요."); return; }
+  if(kakaoConnected()){ kakaoRefreshStatus(); return; }
+  Kakao.Auth.login({
+    scope: "talk_message",
+    success: ()=>{ kakaoRefreshStatus(); alert("카카오톡 연결 완료 ✅\n이제 일정 알림이 카카오톡으로 전송됩니다."); },
+    fail: (err)=>{ console.warn(err); alert("카카오 연결 실패: "+(err&&err.error_description?err.error_description:JSON.stringify(err))); }
+  });
+}
+function kakaoLogout(){
+  if(kakaoConnected()){ Kakao.Auth.logout(()=>kakaoRefreshStatus()); }
+  else kakaoRefreshStatus();
+}
+
+/* 나에게 보내기 (memo/default/send) */
+function kakaoSendText(text, webUrl){
+  if(!kakaoConnected()) return Promise.resolve(false);
+  const link = { web_url: webUrl||location.href, mobile_web_url: webUrl||location.href };
+  return Kakao.API.request({
+    url: "/v2/api/talk/memo/default/send",
+    data: { template_object: { object_type:"text", text: text.slice(0,200), link, button_title:"대시보드 열기" } }
+  }).then(()=>true).catch(err=>{ console.warn("카카오 전송 실패:", err); return false; });
+}
+
+/* 임박 알림 훅 (checkAlarms에서 호출) */
+function kakaoOnAlarm(e, before){
+  kakaoCfg = kakaoLoadCfg();
+  if(!kakaoCfg.alarm || !kakaoConnected()) return;
+  const start = (typeof eventDateTime==="function") ? eventDateTime(e) : null;
+  const tt = start ? `${pad(start.getHours())}:${pad(start.getMinutes())}` : (e.s||"");
+  const beforeTxt = before===60 ? "1시간" : before+"분";
+  let msg = `🔔 [일정 알림] ${beforeTxt} 전\n\n📅 ${e.t}\n🕐 ${e.d} ${tt}`;
+  if(e.p) msg += `\n📍 ${e.p}`;
+  if(e.memo) msg += `\n📝 ${e.memo}`;
+  kakaoSendText(msg);
+}
+
+/* 오늘 일정 텍스트 구성 */
+function kakaoBuildTodayBriefing(){
+  const today = todayStr();
+  const todays = (Array.isArray(events)?events:[])
+    .filter(e=>e.d===today)
+    .sort((a,b)=> (a.all?-1:1)-(b.all?-1:1) || String(a.s||"").localeCompare(String(b.s||"")));
+  const dt = parse(today);
+  const head = `📋 오늘의 일정 브리핑\n${today} (${DOW[dt.getDay()]})\n`;
+  if(!todays.length) return head + "\n오늘 등록된 일정이 없습니다. 편안한 하루 되세요!";
+  const lines = todays.map(e=>{
+    const cat = (typeof CAT!=="undefined" && CAT[e.cat]) ? `[${CAT[e.cat].short}] ` : "";
+    const time = e.all ? "종일" : (e.s ? e.s + (e.e?`~${e.e}`:"") : "");
+    let l = `• ${time} ${cat}${e.t}`;
+    if(e.p) l += ` @${e.p}`;
+    return l;
+  });
+  return head + "\n" + lines.join("\n");
+}
+
+/* 아침 브리핑 체크 (1분마다 + 로드 시) */
+function kakaoCheckBriefing(){
+  kakaoCfg = kakaoLoadCfg();
+  if(!kakaoCfg.briefing || !kakaoConnected()) return;
+  const now = new Date();
+  const [bh,bm] = (kakaoCfg.briefTime||"08:00").split(":").map(Number);
+  const today = todayStr();
+  if(kakaoCfg.lastBriefDate===today) return;          // 오늘 이미 전송함
+  const curMin = now.getHours()*60 + now.getMinutes();
+  const setMin = (bh||0)*60 + (bm||0);
+  if(curMin < setMin) return;                          // 아직 전송 시각 전
+  if(curMin > setMin + 180) return;                    // 너무 늦게 열었으면(3시간 경과) 생략
+  const ok = kakaoSendText(kakaoBuildTodayBriefing());
+  // 전송 시도 표시(중복 방지). 실패해도 당일 반복 폭주 막기 위해 기록
+  kakaoCfg.lastBriefDate = today; kakaoSaveCfg(kakaoCfg);
+}
+
+/* ── 모달/UI ── */
+function kakaoRefreshStatus(){
+  const on = kakaoConnected();
+  const box = document.getElementById("kakaoStatus");
+  const txt = document.getElementById("kakaoStatusText");
+  const btn = document.getElementById("kakaoConnectBtn");
+  if(box) box.classList.toggle("on", on);
+  if(txt) txt.textContent = on ? "연결됨 · 나에게 보내기 활성" : "연결 안 됨";
+  if(btn) btn.textContent = on ? "연결 해제" : "카카오 연결";
+}
+function kakaoSyncSwitches(){
+  kakaoCfg = kakaoLoadCfg();
+  const sb=document.getElementById("kakaoSwBriefing"), sa=document.getElementById("kakaoSwAlarm");
+  const bt=document.getElementById("kakaoBriefTime"), br=document.getElementById("kakaoBriefRow");
+  if(sb) sb.classList.toggle("on", !!kakaoCfg.briefing);
+  if(sa) sa.classList.toggle("on", !!kakaoCfg.alarm);
+  if(bt) bt.value = kakaoCfg.briefTime||"08:00";
+  if(br) br.style.display = kakaoCfg.briefing ? "block" : "none";
+}
+function kakaoOpenModal(){ kakaoInit(); kakaoRefreshStatus(); kakaoSyncSwitches(); const bg=document.getElementById("kakaoBg"); if(bg) bg.classList.add("open"); }
+function kakaoCloseModal(){ const bg=document.getElementById("kakaoBg"); if(bg) bg.classList.remove("open"); }
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  kakaoInit();
+  const sbtn=document.getElementById("sideKakao"); if(sbtn) sbtn.onclick=kakaoOpenModal;
+  const cb=document.getElementById("kakaoConnectBtn"); if(cb) cb.onclick=()=>{ kakaoConnected()?kakaoLogout():kakaoLogin(); };
+  const tb=document.getElementById("kakaoTestBtn"); if(tb) tb.onclick=()=>{
+    if(!kakaoConnected()){ alert("먼저 카카오 연결을 진행하세요."); return; }
+    kakaoSendText("✅ 테스트 메시지\n대시보드 카카오톡 연동이 정상 작동합니다.").then(ok=>alert(ok?"전송 성공 ✅ 카카오톡을 확인하세요.":"전송 실패. 콘솔을 확인하세요."));
+  };
+  const cl=document.getElementById("kakaoCloseBtn"); if(cl) cl.onclick=kakaoCloseModal;
+  const bg=document.getElementById("kakaoBg"); if(bg) bg.onclick=ev=>{ if(ev.target.id==="kakaoBg") kakaoCloseModal(); };
+  document.querySelectorAll(".kakao-sw").forEach(sw=>{
+    sw.onclick=()=>{ kakaoCfg=kakaoLoadCfg(); const k=sw.dataset.k; kakaoCfg[k]=!kakaoCfg[k]; kakaoSaveCfg(kakaoCfg); kakaoSyncSwitches(); };
+  });
+  const bt=document.getElementById("kakaoBriefTime"); if(bt) bt.onchange=()=>{ kakaoCfg=kakaoLoadCfg(); kakaoCfg.briefTime=bt.value||"08:00"; kakaoSaveCfg(kakaoCfg); };
+  setTimeout(kakaoCheckBriefing, 4000);
+  setInterval(kakaoCheckBriefing, 60000);
 });
 </script>
