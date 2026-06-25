@@ -5712,7 +5712,7 @@ document.addEventListener("keydown",function(e){
 });
 </script>
 <!-- ══════════════════════ 카카오톡 알림 연동 (A안: 대시보드 열려있을 때 나에게 보내기) ══════════════════════ -->
-<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/v1/kakao.min.js"
         crossorigin="anonymous" onerror="window._kakaoSdkFailed=true;"></script>
 <style>
 #kakaoBg{position:fixed;inset:0;z-index:10050;background:rgba(15,41,34,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;font-family:'Pretendard',sans-serif;}
@@ -5813,14 +5813,20 @@ function kakaoLogout(){
   else kakaoRefreshStatus();
 }
 
-/* 나에게 보내기 (memo/default/send) */
+/* 나에게 보내기 (memo/default/send) — v1 SDK 콜백 방식을 Promise로 감쌈 */
 function kakaoSendText(text, webUrl){
-  if(!kakaoConnected()) return Promise.resolve(false);
-  const link = { web_url: webUrl||location.href, mobile_web_url: webUrl||location.href };
-  return Kakao.API.request({
-    url: "/v2/api/talk/memo/default/send",
-    data: { template_object: { object_type:"text", text: text.slice(0,200), link, button_title:"대시보드 열기" } }
-  }).then(()=>true).catch(err=>{ console.warn("카카오 전송 실패:", err); return false; });
+  return new Promise((resolve)=>{
+    if(!kakaoConnected()){ resolve(false); return; }
+    const link = { web_url: webUrl||location.href, mobile_web_url: webUrl||location.href };
+    try{
+      Kakao.API.request({
+        url: "/v2/api/talk/memo/default/send",
+        data: { template_object: { object_type:"text", text: String(text).slice(0,200), link, button_title:"대시보드 열기" } },
+        success: ()=>resolve(true),
+        fail: (err)=>{ console.warn("카카오 전송 실패:", err); resolve(false); }
+      });
+    }catch(e){ console.warn("카카오 전송 예외:", e); resolve(false); }
+  });
 }
 
 /* 임박 알림 훅 (checkAlarms에서 호출) */
